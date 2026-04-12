@@ -11,7 +11,10 @@
   <style>
     /* ── Reset ─────────────────────────────────────────── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: auto; }
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+    }
     body {
       background: #060608;
       color: #fff;
@@ -66,7 +69,7 @@
 
   <!-- NAV -->
   <nav id="nav">
-    <a href="#" class="nav-logo">Saboor</a>
+    <a href="/" class="nav-logo">Saboor</a>
     <div class="nav-links">
       <a href="#work">Work</a>
       <a href="#about">About</a>
@@ -75,10 +78,13 @@
     </div>
   </nav>
 
+  <main id="main-content">
+  </main>
+
   <script>
     // Nav scroll state
     window.addEventListener('scroll', () => {
-      document.getElementById('nav').classList.toggle('scrolled', scrollY > 30);
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 30);
     }, { passive: true });
   </script>
 </body>
