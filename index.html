@@ -568,6 +568,7 @@
         .join(' ');
 
       const words   = container.querySelectorAll('.scrub-word');
+      if (!words.length) return;
       const section = document.getElementById('scrub-section');
 
       function updateScrub() {
@@ -581,7 +582,11 @@
           const end   = (i + 1) / words.length;
           // local t within this word's window, stretched 1.8× so overlap feels good
           const t = Math.max(0, Math.min(1, (progress - start) / (end - start) * 1.8));
-          word.style.opacity = String(0.08 + t * 0.92);
+          const newOp = String((0.08 + t * 0.92).toFixed(4));
+          if (word.dataset.op !== newOp) {
+            word.style.opacity = newOp;
+            word.dataset.op = newOp;
+          }
         });
       }
 
