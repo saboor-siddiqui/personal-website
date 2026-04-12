@@ -15,6 +15,15 @@
     @media (prefers-reduced-motion: no-preference) {
       html { scroll-behavior: smooth; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-eyebrow, .hero-name-bold, .hero-name-thin,
+      .hero-tagline, .hero-btns, .scroll-cue {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+      .scroll-line { animation: none; opacity: 0.4; }
+    }
     body {
       background: #060608;
       color: #fff;
@@ -108,7 +117,6 @@
     .hero-content {
       position: relative; z-index: 2;
       pointer-events: none;
-      will-change: transform;
     }
     .hero-eyebrow {
       font-size: 10px; font-weight: 400;
@@ -153,9 +161,8 @@
       border: none; cursor: none;
       transition: background 0.3s cubic-bezier(0.16,1,0.3,1),
                   transform  0.3s cubic-bezier(0.16,1,0.3,1);
-      will-change: transform;
     }
-    .btn-w:hover { background: rgba(255,255,255,0.85); }
+    .btn-w:hover { background: rgba(255,255,255,0.85); will-change: transform; }
     .btn-g {
       background: transparent; color: rgba(255,255,255,0.48);
       padding: 14px 38px; border-radius: 100px;
@@ -163,9 +170,8 @@
       letter-spacing: 0.3px; text-decoration: none;
       border: 1px solid rgba(255,255,255,0.1); cursor: none;
       transition: color 0.3s, border-color 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1);
-      will-change: transform;
     }
-    .btn-g:hover { color: #fff; border-color: rgba(255,255,255,0.35); }
+    .btn-g:hover { color: #fff; border-color: rgba(255,255,255,0.35); will-change: transform; }
     .scroll-cue {
       position: absolute; bottom: 38px; left: 50%;
       transform: translateX(-50%); z-index: 2;
@@ -178,6 +184,7 @@
     .scroll-line {
       width: 1px; height: 48px;
       background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+      transform-origin: top;
     }
 
     /* ── Entrance animations ─────────────────────────────── */
@@ -190,10 +197,10 @@
       to   { opacity: 1; }
     }
     @keyframes scanLine {
-      0%   { opacity: 0; transform: scaleY(0);   transform-origin: top; }
-      45%  { opacity: 1; transform: scaleY(1);   transform-origin: top; }
-      85%  { opacity: 0; transform: scaleY(1);   transform-origin: bottom; }
-      100% { opacity: 0; }
+      0%   { transform: scaleY(0) translateY(0);    opacity: 0; }
+      30%  { transform: scaleY(1) translateY(0);    opacity: 1; }
+      60%  { transform: scaleY(1) translateY(0);    opacity: 1; }
+      100% { transform: scaleY(0) translateY(100%); opacity: 0; }
     }
     .hero-eyebrow  { animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.3s  both; }
     .hero-name-bold{ animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.48s both; }
@@ -228,11 +235,13 @@
       <canvas id="hero-canvas"></canvas>
       <div class="hero-content" id="heroContent">
         <p class="hero-eyebrow">Data Engineer &nbsp;·&nbsp; Cloud Solutions Architect &nbsp;·&nbsp; AI Builder</p>
-        <span class="hero-name-bold">SABOOR</span>
-        <span class="hero-name-thin">SIDDIQUI</span>
+        <h1>
+          <span class="hero-name-bold">SABOOR</span>
+          <span class="hero-name-thin">SIDDIQUI</span>
+        </h1>
         <p class="hero-tagline">Friendly Neighborhood Engineer</p>
         <div class="hero-btns">
-          <a href="#contact" class="btn-w js-magnetic">View Work</a>
+          <a href="#work" class="btn-w js-magnetic">View Work</a>
           <a href="https://github.com/saboor-siddiqui" class="btn-g js-magnetic" target="_blank" rel="noopener">GitHub ↗</a>
         </div>
       </div>
@@ -266,16 +275,18 @@
       requestAnimationFrame(tickCursor);
     })();
 
-    // Expand ring on interactive elements
-    document.querySelectorAll('a, button, .btn-w, .btn-g').forEach(el => {
-      el.addEventListener('mouseenter', () => {
+    // Expand ring on interactive elements (delegated — covers future DOM additions)
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest('a, button, .js-interactive')) {
         curRing.style.width = curRing.style.height = '64px';
         curDot.style.width  = curDot.style.height  = '4px';
-      });
-      el.addEventListener('mouseleave', () => {
+      }
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest('a, button, .js-interactive')) {
         curRing.style.width = curRing.style.height = '40px';
         curDot.style.width  = curDot.style.height  = '8px';
-      });
+      }
     });
 
     // Nav scroll state
