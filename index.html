@@ -778,8 +778,12 @@
 
       const FCONNECT_SQ = 6400; // 80²
 
+      let _waitFrames = 0;
       (function featLoop() {
-        if (!FW || !FH) { requestAnimationFrame(featLoop); return; }
+        if (!FW || !FH) {
+          if (++_waitFrames < 120) requestAnimationFrame(featLoop);
+          return;
+        }
         ctx.clearRect(0, 0, FW, FH);
         fmx += (ftmx - fmx) * 0.08;
         fmy += (ftmy - fmy) * 0.08;
