@@ -401,7 +401,8 @@
 
       let lastTs = 0;
       function heroLoop(ts) {
-        const dt = Math.min((ts - lastTs) / 16.67, 3);
+        if (!lastTs) { lastTs = ts; requestAnimationFrame(heroLoop); return; }
+        const dt = Math.min((ts - lastTs) / 16.67, 1);
         lastTs = ts;
         ctx.clearRect(0, 0, W, H);
 
@@ -430,39 +431,38 @@
           fx += (p.hx - p.x) * HOME_SPRING;
           fy += (p.hy - p.y) * HOME_SPRING;
 
-          p.vx = (p.vx + fx * 0.016 * dt) * DAMPING;
-          p.vy = (p.vy + fy * 0.016 * dt) * DAMPING;
+          p.vx = (p.vx + (fx / p.mass) * 0.016 * dt) * DAMPING;
+          p.vy = (p.vy + (fy / p.mass) * 0.016 * dt) * DAMPING;
           p.x += p.vx * dt;
           p.y += p.vy * dt;
           p.angle += p.angV * dt;
 
           // Soft wraparound
           const pad = 80;
-          if (p.x < -pad) p.x = W + pad;
-          if (p.x > W + pad) p.x = -pad;
-          if (p.y < -pad) p.y = H + pad;
-          if (p.y > H + pad) p.y = -pad;
+          if (p.x < -pad) { p.x = W + pad; p.vx = 0; }
+          if (p.x > W + pad) { p.x = -pad; p.vx = 0; }
+          if (p.y < -pad) { p.y = H + pad; p.vy = 0; }
+          if (p.y > H + pad) { p.y = -pad; p.vy = 0; }
 
           const proximity = Math.max(0, 1 - dist / 320);
           drawShape(p.type, p.x, p.y, p.size, p.angle, p.baseAlpha + proximity * 0.45);
         });
 
-        // Connection lines — only iterate pairs once
+        // Connection lines — single batched stroke for performance
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+        ctx.lineWidth = 0.5;
         for (let i = 0; i < particles.length; i++) {
           for (let j = i + 1; j < particles.length; j++) {
             const a = particles[i], b = particles[j];
             const dx = a.x - b.x, dy = a.y - b.y;
-            const d2 = dx * dx + dy * dy;
-            if (d2 < CONNECT_DIST_SQ) {
-              ctx.beginPath();
+            if (dx * dx + dy * dy < CONNECT_DIST_SQ) {
               ctx.moveTo(a.x, a.y);
               ctx.lineTo(b.x, b.y);
-              ctx.strokeStyle = `rgba(255,255,255,${(1 - d2 / CONNECT_DIST_SQ) * 0.065})`;
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
             }
           }
         }
+        ctx.stroke();
 
         requestAnimationFrame(heroLoop);
       }
@@ -471,24 +471,32 @@
 
     // ── Hero scroll parallax ───────────────────────────────
     const heroContent = document.getElementById('heroContent');
+    let scrollRAF = 0;
     window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      if (y < innerHeight) {
-        heroContent.style.transform = `translateY(${y * 0.2}px)`;
-        heroContent.style.opacity   = String(Math.max(0, 1 - y / (innerHeight * 0.55)));
-      }
+      cancelAnimationFrame(scrollRAF);
+      scrollRAF = requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (y < innerHeight) {
+          heroContent.style.transform = `translateY(${y * 0.2}px)`;
+          heroContent.style.opacity   = String(Math.max(0, 1 - y / (innerHeight * 0.55)));
+        }
+      });
     }, { passive: true });
 
     // ── Magnetic buttons ───────────────────────────────────
     function initMagnetic() {
       document.querySelectorAll('.js-magnetic').forEach(el => {
+        let cachedRect = null;
+        el.addEventListener('mouseenter', () => { cachedRect = el.getBoundingClientRect(); });
         el.addEventListener('mousemove', e => {
-          const r   = el.getBoundingClientRect();
-          const dx  = e.clientX - (r.left + r.width  / 2);
-          const dy  = e.clientY - (r.top  + r.height / 2);
+          const r  = cachedRect;
+          if (!r) return;
+          const dx = e.clientX - (r.left + r.width  / 2);
+          const dy = e.clientY - (r.top  + r.height / 2);
           el.style.transform = `translate(${dx * 0.28}px, ${dy * 0.28}px)`;
         });
         el.addEventListener('mouseleave', () => {
+          cachedRect = null;
           el.style.transform = '';
         });
       });
