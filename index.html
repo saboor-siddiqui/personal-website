@@ -96,6 +96,7 @@
                   height 0.4s cubic-bezier(0.16,1,0.3,1),
                   opacity 0.3s;
       mix-blend-mode: difference;
+      will-change: transform;
     }
     body { cursor: none; }
     @media (pointer: coarse) {
@@ -117,6 +118,7 @@
     .hero-content {
       position: relative; z-index: 2;
       pointer-events: none;
+      will-change: transform, opacity;
     }
     .hero-eyebrow {
       font-size: 10px; font-weight: 400;
@@ -162,7 +164,7 @@
       transition: background 0.3s cubic-bezier(0.16,1,0.3,1),
                   transform  0.3s cubic-bezier(0.16,1,0.3,1);
     }
-    .btn-w:hover { background: rgba(255,255,255,0.85); will-change: transform; }
+    .btn-w:hover { background: rgba(255,255,255,0.85); transform: scale(1.04); }
     .btn-g {
       background: transparent; color: rgba(255,255,255,0.48);
       padding: 14px 38px; border-radius: 100px;
@@ -171,7 +173,7 @@
       border: 1px solid rgba(255,255,255,0.1); cursor: none;
       transition: color 0.3s, border-color 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1);
     }
-    .btn-g:hover { color: #fff; border-color: rgba(255,255,255,0.35); will-change: transform; }
+    .btn-g:hover { color: #fff; border-color: rgba(255,255,255,0.35); transform: translateY(-2px); }
     .scroll-cue {
       position: absolute; bottom: 38px; left: 50%;
       transform: translateX(-50%); z-index: 2;
@@ -383,7 +385,7 @@
                   transform  0.3s cubic-bezier(0.16,1,0.3,1);
       will-change: transform;
     }
-    .cta-w:hover { background: rgba(255,255,255,0.85); }
+    .cta-w:hover { background: rgba(255,255,255,0.85); transform: scale(1.03) translateY(-2px); }
     .cta-b {
       padding: 15px 40px; border-radius: 100px;
       background: transparent; color: rgba(255,255,255,0.42);
@@ -394,7 +396,7 @@
                   transform 0.3s cubic-bezier(0.16,1,0.3,1);
       will-change: transform;
     }
-    .cta-b:hover { color: #fff; border-color: rgba(255,255,255,0.35); }
+    .cta-b:hover { color: #fff; border-color: rgba(255,255,255,0.35); transform: translateY(-2px); }
 
     /* ── Footer ─────────────────────────────────────────── */
     footer {
@@ -405,6 +407,60 @@
     footer p {
       font-size: 10px; color: rgba(255,255,255,0.15);
       letter-spacing: 1px;
+    }
+
+    /* ── Reduced motion ──────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      #hero-canvas { display: none; }
+    }
+
+    /* ── Mobile ──────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      #nav { padding: 24px 28px; }
+      #nav.scrolled { padding: 16px 28px; }
+      .nav-links { display: none; }
+      #cur-dot, #cur-ring { display: none; }
+      body { cursor: auto; }
+
+      .hero-eyebrow { font-size: 9px; letter-spacing: 4px; }
+      .hero-tagline { font-size: 11px; }
+      .hero-btns { flex-direction: column; align-items: center; }
+
+      .stats { grid-template-columns: 1fr; }
+      .stat { border-right: none; padding: 40px 28px; }
+
+      .scrub-section { padding: 80px 28px; }
+      .scrub-text { font-size: clamp(20px, 6vw, 32px); }
+
+      .features-wrap { height: auto; }
+      .features-inner {
+        position: relative;
+        grid-template-columns: 1fr;
+        grid-template-rows: 45vh auto;
+        height: auto;
+      }
+      .feat-left { height: 45vh; }
+      .feat-right { padding: 48px 28px; }
+      .feat-panel { opacity: 1; transform: none; }
+      .feat-panel-title { font-size: 28px; }
+
+      .cta-section { padding: 100px 28px 80px; }
+      .cta-btns { flex-direction: column; align-items: center; }
+
+      footer { padding: 24px 28px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+
+    /* ── Tablet ──────────────────────────────────────────── */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      #nav { padding: 24px 40px; }
+      .feat-right { padding: 60px 48px; }
+      .feat-panel-title { font-size: 30px; }
+      .cta-section { padding: 140px 40px 100px; }
     }
   </style>
 </head>
