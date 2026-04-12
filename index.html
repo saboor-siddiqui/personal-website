@@ -256,6 +256,74 @@
       transition: opacity 0.1s;
       margin-right: 0.28em;
     }
+
+    /* ── Sticky Features ────────────────────────────────── */
+    .features-wrap {
+      position: relative;
+      height: 280vh;
+    }
+    .features-inner {
+      position: sticky; top: 0; height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+    .feat-left {
+      position: relative;
+      border-right: 1px solid rgba(255,255,255,0.04);
+      background: #030304;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #feat-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+    }
+    .feat-left-label {
+      position: absolute; bottom: 36px; left: 36px;
+      font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+      color: rgba(255,255,255,0.1);
+      pointer-events: none;
+    }
+    .feat-right {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 72px;
+      overflow: hidden;
+    }
+    .feat-panel {
+      padding: 52px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      opacity: 0.15;
+      transform: translateY(12px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .feat-panel:last-child { border-bottom: none; }
+    .feat-panel.active { opacity: 1; transform: translateY(0); }
+    .feat-panel-num {
+      font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+      color: rgba(255,255,255,0.18);
+      margin-bottom: 18px;
+    }
+    .feat-panel-title {
+      font-size: 36px; font-weight: 600;
+      letter-spacing: -0.025em; line-height: 1.1;
+      color: rgba(255,255,255,0.92);
+      margin-bottom: 16px;
+    }
+    .feat-panel-body {
+      font-size: 14px; line-height: 1.8;
+      color: rgba(255,255,255,0.32);
+      max-width: 380px;
+    }
+    .feat-panel-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 20px;
+    }
+    .feat-tag {
+      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 4px 10px; border-radius: 100px;
+    }
   </style>
 </head>
 <body>
@@ -319,6 +387,71 @@
       <p class="scrub-text" id="scrub-text">
         <!-- Words injected by JS below -->
       </p>
+    </div>
+
+    <!-- STICKY FEATURES -->
+    <div class="features-wrap" id="work">
+      <div class="features-inner">
+
+        <!-- Left: live particle canvas -->
+        <div class="feat-left">
+          <canvas id="feat-canvas"></canvas>
+          <span class="feat-left-label">Expertise</span>
+        </div>
+
+        <!-- Right: 3 scrolling panels -->
+        <div class="feat-right" id="feat-right">
+
+          <div class="feat-panel active" data-panel="0">
+            <div class="feat-panel-num">01 — AI Engineering</div>
+            <div class="feat-panel-title">Systems<br>That Think</div>
+            <div class="feat-panel-body">
+              Building LLM-powered agents that automate complex engineering workflows.
+              RADAR reviews your PRs. FLARE triages Airflow failures before you wake up.
+              RAGGY debugs your RAG pipelines. AI that works while you sleep.
+            </div>
+            <div class="feat-panel-tags">
+              <span class="feat-tag">LangGraph</span>
+              <span class="feat-tag">Python</span>
+              <span class="feat-tag">LLMs</span>
+              <span class="feat-tag">RAG</span>
+            </div>
+          </div>
+
+          <div class="feat-panel" data-panel="1">
+            <div class="feat-panel-num">02 — Data Engineering</div>
+            <div class="feat-panel-title">Pipelines<br>at Scale</div>
+            <div class="feat-panel-body">
+              Architecting data infrastructure at American Express.
+              Previously earned the "Rising Rockstar" award at Paytm for dramatically
+              improving reporting pipeline performance. Spark, BigQuery, Airflow — at enterprise scale.
+            </div>
+            <div class="feat-panel-tags">
+              <span class="feat-tag">Apache Airflow</span>
+              <span class="feat-tag">Apache Spark</span>
+              <span class="feat-tag">BigQuery</span>
+              <span class="feat-tag">Scala</span>
+            </div>
+          </div>
+
+          <div class="feat-panel" data-panel="2">
+            <div class="feat-panel-num">03 — Cloud Architecture</div>
+            <div class="feat-panel-title">Built to<br>Last</div>
+            <div class="feat-panel-body">
+              Designing distributed systems and cloud infrastructure that handles
+              real-world load. From lineage extraction to SQL optimization —
+              tooling that makes entire engineering teams faster.
+            </div>
+            <div class="feat-panel-tags">
+              <span class="feat-tag">Cloud Architecture</span>
+              <span class="feat-tag">Distributed Systems</span>
+              <span class="feat-tag">BigQuery</span>
+              <span class="feat-tag">Python</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
 
   </main>
@@ -592,6 +725,109 @@
 
       window.addEventListener('scroll', updateScrub, { passive: true });
       updateScrub();
+    })();
+
+    // ── Features sticky scroll highlight ──────────────────
+    (function initFeatScroll() {
+      const wrap   = document.getElementById('work');
+      const panels = document.querySelectorAll('.feat-panel');
+      if (!wrap || !panels.length) return;
+
+      window.addEventListener('scroll', () => {
+        const rect     = wrap.getBoundingClientRect();
+        const progress = (-rect.top) / (rect.height - innerHeight);
+        const idx      = Math.max(0, Math.min(panels.length - 1, Math.floor(progress * panels.length)));
+        panels.forEach((p, i) => p.classList.toggle('active', i === idx));
+      }, { passive: true });
+    })();
+
+    // ── Features canvas particles (lighter version) ───────
+    (function initFeatParticles() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const canvas = document.getElementById('feat-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const COUNT = 65;
+      function rand(a, b) { return a + Math.random() * (b - a); }
+
+      let FW = 0, FH = 0;
+      function resizeFC() {
+        const r = canvas.parentElement.getBoundingClientRect();
+        FW = canvas.width  = r.width;
+        FH = canvas.height = r.height;
+      }
+      resizeFC();
+      new ResizeObserver(resizeFC).observe(canvas.parentElement);
+
+      const fparts = Array.from({ length: COUNT }, () => ({
+        x:  rand(0, 800), y: rand(0, 800),
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r:  rand(1.2, 3.5),
+        alpha: rand(0.05, 0.22),
+      }));
+
+      let fmx = 0, fmy = 0, ftmx = 0, ftmy = 0;
+      canvas.parentElement.addEventListener('mousemove', e => {
+        const r = canvas.getBoundingClientRect();
+        ftmx = e.clientX - r.left;
+        ftmy = e.clientY - r.top;
+      }, { passive: true });
+
+      const FCONNECT_SQ = 6400; // 80²
+
+      (function featLoop() {
+        if (!FW || !FH) { requestAnimationFrame(featLoop); return; }
+        ctx.clearRect(0, 0, FW, FH);
+        fmx += (ftmx - fmx) * 0.08;
+        fmy += (ftmy - fmy) * 0.08;
+
+        fparts.forEach(p => {
+          const dx = fmx - p.x, dy = fmy - p.y;
+          const d  = Math.sqrt(dx * dx + dy * dy) || 1;
+
+          if (d < 110) {
+            // repel from mouse
+            p.vx -= (dx / d) * 5 / d;
+            p.vy -= (dy / d) * 5 / d;
+          } else {
+            // drift toward centre of canvas
+            p.vx += (FW / 2 - p.x) * 0.0008;
+            p.vy += (FH / 2 - p.y) * 0.0008;
+          }
+          p.vx *= 0.95; p.vy *= 0.95;
+          p.x  += p.vx; p.y  += p.vy;
+
+          if (p.x < 0) p.x = FW; if (p.x > FW) p.x = 0;
+          if (p.y < 0) p.y = FH; if (p.y > FH) p.y = 0;
+
+          const prox = Math.max(0, 1 - d / 200);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${p.alpha + prox * 0.3})`;
+          ctx.fill();
+        });
+
+        // Connections — batched stroke
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < fparts.length; i++) {
+          for (let j = i + 1; j < fparts.length; j++) {
+            const a = fparts[i], b = fparts[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            if (dx * dx + dy * dy < FCONNECT_SQ) {
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+            }
+          }
+        }
+        ctx.stroke();
+
+        requestAnimationFrame(featLoop);
+      })();
     })();
 
     // ── Magnetic buttons ───────────────────────────────────
