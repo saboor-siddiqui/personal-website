@@ -324,6 +324,88 @@
       border: 1px solid rgba(255,255,255,0.1);
       padding: 4px 10px; border-radius: 100px;
     }
+
+    /* ── CTA ────────────────────────────────────────────── */
+    .cta-section {
+      padding: 180px 56px 140px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-glow {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px; height: 500px;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.016) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .cta-tag {
+      font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
+      color: rgba(255,255,255,0.18);
+      margin-bottom: 22px;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .cta-headline {
+      font-size: clamp(44px, 6vw, 86px); font-weight: 700;
+      letter-spacing: -0.03em; line-height: 0.98;
+      color: rgba(255,255,255,0.92);
+      margin-bottom: 16px;
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s,
+                  transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s;
+    }
+    .cta-sub {
+      font-size: 15px; color: rgba(255,255,255,0.28);
+      margin-bottom: 52px; line-height: 1.7;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s,
+                  transform 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s;
+    }
+    .cta-btns {
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s,
+                  transform 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s;
+    }
+    .cta-section.visible .cta-tag,
+    .cta-section.visible .cta-headline,
+    .cta-section.visible .cta-sub,
+    .cta-section.visible .cta-btns {
+      opacity: 1; transform: translateY(0);
+    }
+    .cta-w {
+      padding: 15px 40px; border-radius: 100px;
+      background: #fff; color: #000;
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      text-decoration: none; cursor: none;
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1),
+                  transform  0.3s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform;
+    }
+    .cta-w:hover { background: rgba(255,255,255,0.85); }
+    .cta-b {
+      padding: 15px 40px; border-radius: 100px;
+      background: transparent; color: rgba(255,255,255,0.42);
+      font-family: inherit; font-size: 14px; font-weight: 400;
+      text-decoration: none; cursor: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: color 0.3s, border-color 0.3s,
+                  transform 0.3s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform;
+    }
+    .cta-b:hover { color: #fff; border-color: rgba(255,255,255,0.35); }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.04);
+      padding: 28px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p {
+      font-size: 10px; color: rgba(255,255,255,0.15);
+      letter-spacing: 1px;
+    }
   </style>
 </head>
 <body>
@@ -453,6 +535,32 @@
         </div>
       </div>
     </div>
+
+    <!-- CTA -->
+    <section class="cta-section" id="contact">
+      <div class="cta-glow"></div>
+      <p class="cta-tag">Let's connect</p>
+      <h2 class="cta-headline">Ready to build<br>something great?</h2>
+      <p class="cta-sub">
+        Open to new opportunities, collaborations,<br>and interesting problems.
+      </p>
+      <div class="cta-btns">
+        <a href="https://www.linkedin.com/in/saboor-siddiqui-6a0659188/"
+           class="cta-w js-magnetic" target="_blank" rel="noopener">
+          Connect on LinkedIn
+        </a>
+        <a href="https://github.com/saboor-siddiqui"
+           class="cta-b js-magnetic" target="_blank" rel="noopener">
+          GitHub ↗
+        </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>© 2025 Saboor Siddiqui</p>
+      <p style="font-size:9px;color:rgba(255,255,255,0.08);letter-spacing:2px">CRAFTED WITH OBSESSION</p>
+    </footer>
 
   </main>
 
@@ -832,6 +940,19 @@
 
         requestAnimationFrame(featLoop);
       })();
+    })();
+
+    // ── CTA entrance animation ────────────────────────────
+    (function initCTA() {
+      const cta = document.querySelector('.cta-section');
+      if (!cta) return;
+      const obs = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          cta.classList.add('visible');
+          obs.disconnect();
+        }
+      }, { threshold: 0.2 });
+      obs.observe(cta);
     })();
 
     // ── Magnetic buttons ───────────────────────────────────
