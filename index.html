@@ -63,9 +63,152 @@
     }
     .nav-links a:hover { color: rgba(255,255,255,0.8); }
     .nav-links a:hover::after { left: 0; right: 0; }
+
+    /* ── Cursor ─────────────────────────────────────────── */
+    #cur-dot, #cur-ring {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+    #cur-dot {
+      width: 8px; height: 8px;
+      background: #fff;
+      transition: width 0.3s cubic-bezier(0.16,1,0.3,1),
+                  height 0.3s cubic-bezier(0.16,1,0.3,1),
+                  opacity 0.3s;
+      mix-blend-mode: difference;
+    }
+    #cur-ring {
+      width: 40px; height: 40px;
+      border: 1px solid rgba(255,255,255,0.35);
+      transition: width 0.4s cubic-bezier(0.16,1,0.3,1),
+                  height 0.4s cubic-bezier(0.16,1,0.3,1),
+                  opacity 0.3s;
+      mix-blend-mode: difference;
+    }
+    body { cursor: none; }
+    @media (pointer: coarse) {
+      #cur-dot, #cur-ring { display: none; }
+      body { cursor: auto; }
+    }
+
+    /* ── Hero ───────────────────────────────────────────── */
+    .hero {
+      position: relative; height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center; overflow: hidden;
+    }
+    #hero-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .hero-eyebrow {
+      font-size: 10px; font-weight: 400;
+      letter-spacing: 6px; text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+      margin-bottom: 30px;
+    }
+    .hero-name-bold {
+      display: block;
+      font-size: clamp(76px, 11.5vw, 168px);
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      line-height: 0.86;
+      background: linear-gradient(160deg, #ffffff 40%, rgba(255,255,255,0.5) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-name-thin {
+      display: block;
+      font-size: clamp(76px, 11.5vw, 168px);
+      font-weight: 100;
+      letter-spacing: -0.05em;
+      line-height: 0.86;
+      color: rgba(255,255,255,0.1);
+    }
+    .hero-tagline {
+      margin-top: 36px; margin-bottom: 48px;
+      font-size: 13px; font-weight: 400;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+    }
+    .hero-btns {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      pointer-events: all;
+    }
+    .btn-w {
+      background: #fff; color: #000;
+      padding: 14px 38px; border-radius: 100px;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      letter-spacing: 0.3px; text-decoration: none;
+      border: none; cursor: none;
+      transition: background 0.3s cubic-bezier(0.16,1,0.3,1),
+                  transform  0.3s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform;
+    }
+    .btn-w:hover { background: rgba(255,255,255,0.85); }
+    .btn-g {
+      background: transparent; color: rgba(255,255,255,0.48);
+      padding: 14px 38px; border-radius: 100px;
+      font-family: inherit; font-size: 13px; font-weight: 400;
+      letter-spacing: 0.3px; text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.1); cursor: none;
+      transition: color 0.3s, border-color 0.3s, transform 0.3s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform;
+    }
+    .btn-g:hover { color: #fff; border-color: rgba(255,255,255,0.35); }
+    .scroll-cue {
+      position: absolute; bottom: 38px; left: 50%;
+      transform: translateX(-50%); z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .scroll-cue span {
+      font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+      color: rgba(255,255,255,0.15);
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+    }
+
+    /* ── Entrance animations ─────────────────────────────── */
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scanLine {
+      0%   { opacity: 0; transform: scaleY(0);   transform-origin: top; }
+      45%  { opacity: 1; transform: scaleY(1);   transform-origin: top; }
+      85%  { opacity: 0; transform: scaleY(1);   transform-origin: bottom; }
+      100% { opacity: 0; }
+    }
+    .hero-eyebrow  { animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.3s  both; }
+    .hero-name-bold{ animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.48s both; }
+    .hero-name-thin{ animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.60s both; }
+    .hero-tagline  { animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.76s both; }
+    .hero-btns     { animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.92s both; }
+    .scroll-cue    { animation: fadeIn 2s 1.6s both; }
+    .scroll-line   { animation: scanLine 2.8s ease-in-out infinite; }
   </style>
 </head>
 <body>
+
+  <!-- CURSOR -->
+  <div id="cur-dot"></div>
+  <div id="cur-ring"></div>
 
   <!-- NAV -->
   <nav id="nav">
@@ -79,9 +222,62 @@
   </nav>
 
   <main id="main-content">
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <canvas id="hero-canvas"></canvas>
+      <div class="hero-content" id="heroContent">
+        <p class="hero-eyebrow">Data Engineer &nbsp;·&nbsp; Cloud Solutions Architect &nbsp;·&nbsp; AI Builder</p>
+        <span class="hero-name-bold">SABOOR</span>
+        <span class="hero-name-thin">SIDDIQUI</span>
+        <p class="hero-tagline">Friendly Neighborhood Engineer</p>
+        <div class="hero-btns">
+          <a href="#contact" class="btn-w js-magnetic">View Work</a>
+          <a href="https://github.com/saboor-siddiqui" class="btn-g js-magnetic" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="scroll-cue" aria-hidden="true">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
   </main>
 
   <script>
+    // ── Custom Cursor ──────────────────────────────────────
+    const curDot  = document.getElementById('cur-dot');
+    const curRing = document.getElementById('cur-ring');
+    let curRingX = innerWidth / 2, curRingY = innerHeight / 2;
+    let curMouseX = curRingX,      curMouseY = curRingY;
+
+    document.addEventListener('mousemove', e => {
+      curMouseX = e.clientX;
+      curMouseY = e.clientY;
+      curDot.style.left = e.clientX + 'px';
+      curDot.style.top  = e.clientY + 'px';
+    });
+
+    (function tickCursor() {
+      curRingX += (curMouseX - curRingX) * 0.1;
+      curRingY += (curMouseY - curRingY) * 0.1;
+      curRing.style.left = curRingX + 'px';
+      curRing.style.top  = curRingY + 'px';
+      requestAnimationFrame(tickCursor);
+    })();
+
+    // Expand ring on interactive elements
+    document.querySelectorAll('a, button, .btn-w, .btn-g').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        curRing.style.width = curRing.style.height = '64px';
+        curDot.style.width  = curDot.style.height  = '4px';
+      });
+      el.addEventListener('mouseleave', () => {
+        curRing.style.width = curRing.style.height = '40px';
+        curDot.style.width  = curDot.style.height  = '8px';
+      });
+    });
+
     // Nav scroll state
     window.addEventListener('scroll', () => {
       document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 30);
