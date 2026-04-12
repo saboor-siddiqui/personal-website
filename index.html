@@ -209,6 +209,53 @@
     .hero-btns     { animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.92s both; }
     .scroll-cue    { animation: fadeIn 2s 1.6s both; }
     .scroll-line   { animation: scanLine 2.8s ease-in-out infinite; }
+
+    /* ── Stats ──────────────────────────────────────────── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top:    1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .stat {
+      padding: 64px 56px;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.04);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-number {
+      display: block;
+      font-size: 56px; font-weight: 700;
+      letter-spacing: -0.04em;
+      color: rgba(255,255,255,0.88);
+    }
+    .stat-label {
+      display: block;
+      font-size: 10px; font-weight: 400;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+      margin-top: 10px;
+    }
+
+    /* ── Text Scrub ─────────────────────────────────────── */
+    .scrub-section {
+      padding: 160px 56px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .scrub-text {
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      color: #fff;
+    }
+    .scrub-word {
+      display: inline-block;
+      opacity: 0.08;
+      transition: opacity 0.1s;
+      margin-right: 0.28em;
+    }
   </style>
 </head>
 <body>
@@ -250,6 +297,29 @@
         <div class="scroll-line"></div>
       </div>
     </section>
+
+    <!-- STATS -->
+    <div class="stats" id="about">
+      <div class="stat">
+        <span class="stat-number">4+</span>
+        <span class="stat-label">Years of Engineering</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">3</span>
+        <span class="stat-label">AI Agents Shipped</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">∞</span>
+        <span class="stat-label">Pipelines Debugged</span>
+      </div>
+    </div>
+
+    <!-- APPLE TEXT SCRUB -->
+    <div class="scrub-section" id="scrub-section">
+      <p class="scrub-text" id="scrub-text">
+        <!-- Words injected by JS below -->
+      </p>
+    </div>
 
   </main>
 
@@ -482,6 +552,42 @@
         }
       });
     }, { passive: true });
+
+    // ── Apple-style text scrub ────────────────────────────
+    (function initScrub() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const sentence = "I build systems that think, pipelines that heal themselves, and interfaces that feel alive.";
+      const container = document.getElementById('scrub-text');
+      if (!container) return;
+
+      // Wrap each word in a span
+      container.innerHTML = sentence
+        .split(' ')
+        .map(w => `<span class="scrub-word">${w}</span>`)
+        .join(' ');
+
+      const words   = container.querySelectorAll('.scrub-word');
+      const section = document.getElementById('scrub-section');
+
+      function updateScrub() {
+        const rect     = section.getBoundingClientRect();
+        const vh       = innerHeight;
+        // 0 = top of section at bottom of screen; 1 = bottom of section at top of screen
+        const progress = (vh - rect.top) / (rect.height + vh);
+
+        words.forEach((word, i) => {
+          const start = i       / words.length;
+          const end   = (i + 1) / words.length;
+          // local t within this word's window, stretched 1.8× so overlap feels good
+          const t = Math.max(0, Math.min(1, (progress - start) / (end - start) * 1.8));
+          word.style.opacity = String(0.08 + t * 0.92);
+        });
+      }
+
+      window.addEventListener('scroll', updateScrub, { passive: true });
+      updateScrub();
+    })();
 
     // ── Magnetic buttons ───────────────────────────────────
     function initMagnetic() {
