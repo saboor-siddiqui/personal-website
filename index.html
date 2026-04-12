@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Saboor Siddiqui — Data Engineer & Cloud Solutions Architect at American Express. Building AI agents and data systems that scale.">
+  <title>Saboor Siddiqui</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset ─────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #060608;
+      color: #fff;
+      font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, canvas { display: block; }
+
+    /* ── Nav ────────────────────────────────────────────── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 30px 60px;
+      transition: background 0.5s cubic-bezier(0.16,1,0.3,1),
+                  padding   0.5s cubic-bezier(0.16,1,0.3,1),
+                  border-color 0.5s;
+      border-bottom: 1px solid transparent;
+    }
+    #nav.scrolled {
+      background: rgba(6,6,8,0.88);
+      border-color: rgba(255,255,255,0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 20px 60px;
+    }
+    .nav-logo {
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 5px; text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 44px; }
+    .nav-links a {
+      position: relative;
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.28); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 50%; right: 50%;
+      height: 1px; background: rgba(255,255,255,0.5);
+      transition: left 0.3s cubic-bezier(0.16,1,0.3,1),
+                  right 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .nav-links a:hover { color: rgba(255,255,255,0.8); }
+    .nav-links a:hover::after { left: 0; right: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">Saboor</a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="https://github.com/saboor-siddiqui" target="_blank" rel="noopener">GitHub</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <script>
+    // Nav scroll state
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', scrollY > 30);
+    }, { passive: true });
+  </script>
+</body>
+</html>
