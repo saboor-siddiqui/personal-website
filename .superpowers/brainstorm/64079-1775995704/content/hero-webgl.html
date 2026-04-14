@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saboor Siddiqui</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#030303;color:#fff;font-family:-apple-system,'Inter','SF Pro Display',sans-serif;overflow-x:hidden}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:28px 56px;
+  transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+nav.scrolled{
+  background:rgba(3,3,3,0.82);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  padding:20px 56px;
+}
+.logo{font-size:12px;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,0.7)}
+.nav-links{display:flex;gap:40px}
+.nav-links a{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.28);text-decoration:none;transition:color 0.2s}
+.nav-links a:hover{color:rgba(255,255,255,0.8)}
+
+/* HERO */
+.hero{
+  position:relative;height:100vh;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  text-align:center;overflow:hidden;
+}
+#gl{
+  position:absolute;inset:0;width:100%;height:100%;display:block;
+}
+.hero-content{
+  position:relative;z-index:2;
+}
+.eyebrow{
+  font-size:10px;letter-spacing:6px;text-transform:uppercase;
+  color:rgba(255,255,255,0.2);margin-bottom:28px;
+  animation:riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.4s both;
+}
+.name-first{
+  display:block;
+  font-size:clamp(80px,12vw,172px);
+  font-weight:800;
+  letter-spacing:-0.05em;
+  line-height:0.87;
+  color:#fff;
+  animation:riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.55s both;
+}
+.name-last{
+  display:block;
+  font-size:clamp(80px,12vw,172px);
+  font-weight:100;
+  letter-spacing:-0.05em;
+  line-height:0.87;
+  color:rgba(255,255,255,0.12);
+  animation:riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.7s both;
+}
+.tagline{
+  margin-top:36px;margin-bottom:48px;
+  font-size:13px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,0.28);
+  animation:riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 0.88s both;
+}
+.hero-btns{
+  display:flex;gap:14px;justify-content:center;
+  animation:riseIn 1.4s cubic-bezier(0.16,1,0.3,1) 1.05s both;
+}
+.btn-solid{
+  background:#fff;color:#000;
+  padding:14px 38px;border-radius:100px;
+  font-size:13px;font-weight:600;letter-spacing:0.3px;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.btn-solid:hover{background:rgba(255,255,255,0.84);transform:scale(1.05) translateY(-2px)}
+.btn-ghost{
+  background:transparent;color:rgba(255,255,255,0.48);
+  padding:14px 38px;border-radius:100px;
+  font-size:13px;font-weight:400;letter-spacing:0.3px;
+  text-decoration:none;border:1px solid rgba(255,255,255,0.1);cursor:pointer;
+  transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.btn-ghost:hover{color:#fff;border-color:rgba(255,255,255,0.35);transform:translateY(-2px)}
+
+.scroll-cue{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;
+  animation:fadeIn 2s 1.6s both;
+}
+.scroll-cue span{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.15)}
+.scroll-line{
+  width:1px;height:48px;
+  background:linear-gradient(to bottom,rgba(255,255,255,0.4),transparent);
+  animation:scanLine 2.8s ease-in-out infinite;
+}
+
+@keyframes riseIn{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scanLine{
+  0%{opacity:0;transform:scaleY(0);transform-origin:top}
+  45%{opacity:1;transform:scaleY(1);transform-origin:top}
+  85%{opacity:0;transform:scaleY(1);transform-origin:bottom}
+  100%{opacity:0}
+}
+
+/* STATS */
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1px solid rgba(255,255,255,0.04);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.stat{
+  padding:64px 56px;text-align:center;
+  border-right:1px solid rgba(255,255,255,0.04);
+}
+.stat:last-child{border-right:none}
+.stat-n{font-size:52px;font-weight:700;letter-spacing:-0.04em;color:rgba(255,255,255,0.88)}
+.stat-l{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-top:8px}
+
+/* STICKY */
+.sticky-wrap{position:relative;height:280vh}
+.sticky-inner{
+  position:sticky;top:0;height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;overflow:hidden;
+}
+.s-left{
+  position:relative;
+  border-right:1px solid rgba(255,255,255,0.04);
+  background:#020202;
+  display:flex;align-items:center;justify-content:center;
+}
+#fc{position:absolute;inset:0;width:100%;height:100%;display:block}
+.s-left-label{
+  position:absolute;bottom:40px;left:40px;
+  font-size:9px;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(255,255,255,0.12);
+}
+.s-right{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 72px;gap:0;
+}
+.feat{
+  padding:52px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  opacity:0.18;
+  transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  transform:translateY(8px);
+}
+.feat:last-child{border-bottom:none}
+.feat.on{opacity:1;transform:translateY(0)}
+.feat-n{font-size:9px;letter-spacing:4px;color:rgba(255,255,255,0.18);margin-bottom:18px;text-transform:uppercase}
+.feat-h{font-size:38px;font-weight:600;letter-spacing:-0.025em;line-height:1.08;margin-bottom:16px;color:rgba(255,255,255,0.9)}
+.feat-p{font-size:14px;line-height:1.8;color:rgba(255,255,255,0.35);max-width:380px}
+
+/* CTA */
+.cta{
+  padding:180px 56px 140px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.cta-glow{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:900px;height:500px;
+  background:radial-gradient(ellipse,rgba(255,255,255,0.018) 0%,transparent 62%);
+  pointer-events:none;
+}
+.cta-tag{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,0.18);margin-bottom:24px}
+.cta-h{
+  font-size:clamp(44px,6vw,88px);font-weight:700;
+  letter-spacing:-0.035em;line-height:0.98;
+  color:rgba(255,255,255,0.9);margin-bottom:18px;
+}
+.cta-sub{font-size:15px;color:rgba(255,255,255,0.28);margin-bottom:52px;line-height:1.7}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.cta-w{
+  padding:15px 40px;border-radius:100px;background:#fff;color:#000;
+  font-size:14px;font-weight:600;text-decoration:none;letter-spacing:0.2px;
+  transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.cta-w:hover{transform:translateY(-3px) scale(1.03);background:rgba(255,255,255,0.86)}
+.cta-b{
+  padding:15px 40px;border-radius:100px;background:transparent;
+  color:rgba(255,255,255,0.45);border:1px solid rgba(255,255,255,0.1);
+  font-size:14px;font-weight:400;text-decoration:none;letter-spacing:0.2px;
+  transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.cta-b:hover{color:#fff;border-color:rgba(255,255,255,0.35);transform:translateY(-3px)}
+
+/* FOOTER */
+footer{
+  border-top:1px solid rgba(255,255,255,0.04);
+  padding:28px 56px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+footer p{font-size:10px;color:rgba(255,255,255,0.15);letter-spacing:1px}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="logo">Saboor</div>
+  <div class="nav-links">
+    <a href="#">Work</a><a href="#">About</a>
+    <a href="https://github.com/saboor-siddiqui" target="_blank">GitHub</a>
+    <a href="#">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="gl"></canvas>
+  <div class="hero-content">
+    <p class="eyebrow">Software Engineer &nbsp;·&nbsp; Builder &nbsp;·&nbsp; Craftsman</p>
+    <span class="name-first">SABOOR</span>
+    <span class="name-last">SIDDIQUI</span>
+    <p class="tagline">Engineering that moves people</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-solid">View Work</a>
+      <a href="https://github.com/saboor-siddiqui" class="btn-ghost" target="_blank">GitHub ↗</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-n">5+</div><div class="stat-l">Years experience</div></div>
+  <div class="stat"><div class="stat-n">20+</div><div class="stat-l">Projects shipped</div></div>
+  <div class="stat"><div class="stat-n">∞</div><div class="stat-l">Lines of passion</div></div>
+</div>
+
+<!-- STICKY FEATURES -->
+<div class="sticky-wrap" id="sw">
+  <div class="sticky-inner">
+    <div class="s-left">
+      <canvas id="fc"></canvas>
+      <div class="s-left-label">Expertise</div>
+    </div>
+    <div class="s-right">
+      <div class="feat on" data-i="0">
+        <div class="feat-n">01 — Engineering</div>
+        <div class="feat-h">Full-Stack<br>Mastery</div>
+        <div class="feat-p">From API design to pixel-perfect UI. Building systems that are fast, reliable, and a joy to work with. TypeScript, React, Node — plus whatever the problem demands.</div>
+      </div>
+      <div class="feat" data-i="1">
+        <div class="feat-n">02 — Architecture</div>
+        <div class="feat-h">Systems Built<br>to Last</div>
+        <div class="feat-p">Beyond CRUD. Distributed systems, event-driven architectures, deployment pipelines that don't page you at 3am. Engineered for the long run.</div>
+      </div>
+      <div class="feat" data-i="2">
+        <div class="feat-n">03 — Craft</div>
+        <div class="feat-h">The Details<br>That Feel Right</div>
+        <div class="feat-p">The 10ms animation. The loading state that isn't jarring. The error message that's actually helpful. The craft that turns software into experience.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-glow"></div>
+  <p class="cta-tag">Let's connect</p>
+  <h2 class="cta-h">Ready to build<br>something great?</h2>
+  <p class="cta-sub">Open to new opportunities, collaborations,<br>and interesting problems.</p>
+  <div class="cta-btns">
+    <a href="https://www.linkedin.com/in/saboor-siddiqui-6a0659188/" class="cta-w" target="_blank">Connect on LinkedIn</a>
+    <a href="https://github.com/saboor-siddiqui" class="cta-b" target="_blank">GitHub ↗</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Saboor Siddiqui</p>
+  <p style="font-size:9px;color:rgba(255,255,255,0.08);letter-spacing:2px">CRAFTED WITH OBSESSION</p>
+</footer>
+
+<!-- SHADERS -->
+<script id="vert" type="x-shader/x-vertex">#version 300 es
+in vec2 p;
+void main(){gl_Position=vec4(p,0,1);}
+</script>
+
+<script id="frag" type="x-shader/x-fragment">#version 300 es
+precision highp float;
+uniform float T;
+uniform vec2  R;
+uniform vec2  M;
+out vec4 O;
+
+// ── Value noise ──────────────────────────────────────────────
+float hash(vec3 p){
+  p=fract(p*vec3(0.1031,0.1030,0.0973));
+  p+=dot(p,p.yxz+33.33);
+  return fract((p.x+p.y)*p.z);
+}
+float vnoise(vec3 x){
+  vec3 i=floor(x), f=fract(x);
+  f=f*f*(3.-2.*f);
+  return mix(
+    mix(mix(hash(i),           hash(i+vec3(1,0,0)),f.x),
+        mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),
+    mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),
+        mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);
+}
+float fbm(vec3 p){
+  float v=0.,a=.5;
+  mat3 rot=mat3(.8,.6,0,-.6,.8,0,0,0,1);
+  for(int i=0;i<5;i++){
+    v+=a*(vnoise(p)*2.-1.);
+    p=rot*p*2.1+vec3(1.7,9.2,5.3);
+    a*=.48;
+  }
+  return v;
+}
+
+// ── SDF scene ────────────────────────────────────────────────
+float map(vec3 p){
+  float d=length(p)-1.0;
+  // layered displacement: slow organic morph
+  d += fbm(p*1.4+vec3(T*.18,T*.14,T*.12)) * 0.13;
+  d += fbm(p*3.2-vec3(T*.10,T*.16,0.))    * 0.045;
+  return d;
+}
+
+vec3 normal(vec3 p){
+  float e=5e-4;
+  return normalize(vec3(
+    map(p+vec3(e,0,0))-map(p-vec3(e,0,0)),
+    map(p+vec3(0,e,0))-map(p-vec3(0,e,0)),
+    map(p+vec3(0,0,e))-map(p-vec3(0,0,e))
+  ));
+}
+
+// ── GGX specular ─────────────────────────────────────────────
+float GGX(float NdH,float a){
+  float a2=a*a, d=NdH*NdH*(a2-1.)+1.;
+  return a2/(3.14159*d*d+1e-7);
+}
+
+// ── Geometry: Smith GGX visibility (approx) ──────────────────
+float V_SmithGGX(float NdV,float NdL,float a){
+  float k=a*.5;
+  float gv=NdV/(NdV*(1.-k)+k);
+  float gl=NdL/(NdL*(1.-k)+k);
+  return gv*gl;
+}
+
+void main(){
+  vec2 uv=(gl_FragCoord.xy-R*.5)/min(R.x,R.y);
+
+  // Camera with smooth mouse orbit
+  float camX=M.x*.3, camY=M.y*.18;
+  vec3 ro=vec3(camX,camY,3.1);
+  vec3 target=vec3(0);
+  vec3 fwd=normalize(target-ro);
+  vec3 right=normalize(cross(vec3(0,1,0),fwd));
+  vec3 up=cross(fwd,right);
+  vec3 rd=normalize(fwd*1.8+uv.x*right+uv.y*up);
+
+  // Raymarch
+  float t=.4,hit=-1.;
+  for(int i=0;i<80;i++){
+    float d=map(ro+rd*t);
+    if(d<.0008){hit=t;break;}
+    if(t>7.)break;
+    t+=d*.95;
+  }
+
+  vec3 col=vec3(0.);
+
+  if(hit>0.){
+    vec3 p=ro+rd*hit;
+    vec3 n=normal(p);
+    vec3 v=-rd;
+    float NdV=max(0.,dot(n,v));
+
+    // Three light setup — inspired by studio chrome photography
+    // Key: upper-left, warm
+    vec3 L1=normalize(vec3(-2.,3.5,2.5));
+    // Fill: right, cool blue-silver
+    vec3 L2=normalize(vec3(3.,-1.,1.5));
+    // Rim: bottom-back
+    vec3 L3=normalize(vec3(.5,-3.,-2.));
+
+    float rough=.055; // polished chrome
+
+    float NdL1=max(0.,dot(n,L1));
+    float NdL2=max(0.,dot(n,L2));
+    float NdL3=max(0.,dot(n,L3));
+
+    vec3 H1=normalize(L1+v);
+    vec3 H2=normalize(L2+v);
+    vec3 H3=normalize(L3+v);
+
+    float D1=GGX(max(0.,dot(n,H1)),rough);
+    float D2=GGX(max(0.,dot(n,H2)),rough);
+    float D3=GGX(max(0.,dot(n,H3)),rough);
+
+    float V1=V_SmithGGX(NdV,NdL1,rough);
+    float V2=V_SmithGGX(NdV,NdL2,rough);
+    float V3=V_SmithGGX(NdV,NdL3,rough);
+
+    float spec1=D1*V1*NdL1*1.1;
+    float spec2=D2*V2*NdL2*0.35;
+    float spec3=D3*V3*NdL3*0.55;
+
+    // Schlick Fresnel
+    float F0=.04; // base reflectance chrome
+    float fres=F0+(1.-F0)*pow(1.-NdV,5.);
+
+    // Fake env reflection: sample "infinite studio" env
+    vec3 refl=reflect(-v,n);
+    // floor plane reflection: warm strip at horizon
+    float horizon=smoothstep(-.05,.05,refl.y);
+    float skyDome=max(0.,refl.y);
+    float ground=-min(0.,refl.y);
+    float floorStreak=exp(-abs(refl.y)*8.)*smoothstep(.0,.5,abs(refl.x));
+
+    vec3 envCol= vec3(.95,.94,.9)*skyDome*.12     // sky
+               + vec3(.9,.88,.84)*ground*.06       // warm ground
+               + vec3(1.,.98,.94)*floorStreak*.35; // bright floor streak (the money shot)
+
+    // Base: near-black chrome
+    vec3 base=vec3(.025,.025,.028);
+
+    // Light colors
+    vec3 warm=vec3(1.,.97,.92);     // key — warm white
+    vec3 cool=vec3(.82,.9,1.);      // fill — cool blue-silver
+    vec3 rimC=vec3(.9,.92,1.);      // rim
+
+    col = base
+        + warm * spec1
+        + cool * spec2
+        + rimC * spec3 * .7
+        + envCol * fres
+        // very subtle iridescent sheen based on surface orientation
+        + vec3(.01,.015,.03) * pow(1.-NdV,3.) * .8;
+
+    // Ambient occlusion approximation from noise displacement
+    float disp=fbm(p*1.4+vec3(T*.18,T*.14,T*.12));
+    col *= .88 + .12 * (disp*.5+.5);
+  }
+
+  // Background: near-pure black with a whisper of depth
+  vec3 bg=vec3(0.008,0.008,0.01);
+  // Subtle glow halo behind sphere
+  float d2=dot(uv,uv);
+  bg += vec3(.012,.012,.015)*exp(-d2*3.5);
+  if(hit<0.) col=bg;
+
+  // Soft vignette
+  col *= 1.-smoothstep(.35,1.1,d2*.7);
+
+  // Reinhard tonemapping
+  col=col/(col+vec3(.55));
+  // Gamma 2.2
+  col=pow(max(vec3(0.),col),vec3(1./2.2));
+
+  // Subtle film grain
+  float grain=hash(vec3(gl_FragCoord.xy,T*100.))*0.018-0.009;
+  col+=grain;
+
+  O=vec4(clamp(col,0.,1.),1.);
+}
+</script>
+
+<script>
+// ═══ NAV SCROLL ═════════════════════════════════════════════
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',scrollY>30);
+});
+
+// ═══ WEBGL HERO ══════════════════════════════════════════════
+const C=document.getElementById('gl');
+const gl=C.getContext('webgl2',{antialias:false,powerPreference:'high-performance'});
+
+function sh(type,src){
+  const s=gl.createShader(type);
+  gl.shaderSource(s,src);
+  gl.compileShader(s);
+  if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){
+    console.error('Shader:',gl.getShaderInfoLog(s));
+    return null;
+  }
+  return s;
+}
+
+const vs=sh(gl.VERTEX_SHADER,   document.getElementById('vert').textContent.trim());
+const fs=sh(gl.FRAGMENT_SHADER, document.getElementById('frag').textContent.trim());
+const prog=gl.createProgram();
+gl.attachShader(prog,vs); gl.attachShader(prog,fs);
+gl.linkProgram(prog);
+if(!gl.getProgramParameter(prog,gl.LINK_STATUS))
+  console.error('Link:',gl.getProgramInfoLog(prog));
+
+const quad=new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]);
+const buf=gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+gl.bufferData(gl.ARRAY_BUFFER,quad,gl.STATIC_DRAW);
+
+const vao=gl.createVertexArray();
+gl.bindVertexArray(vao);
+const loc=gl.getAttribLocation(prog,'p');
+gl.enableVertexAttribArray(loc);
+gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+
+const uT =gl.getUniformLocation(prog,'T');
+const uR =gl.getUniformLocation(prog,'R');
+const uM =gl.getUniformLocation(prog,'M');
+
+// Render at half-resolution for performance (upscale with CSS)
+const DPR=Math.min(devicePixelRatio,1.5);
+let W,H;
+function resize(){
+  W=Math.floor(C.clientWidth*DPR);
+  H=Math.floor(C.clientHeight*DPR);
+  if(C.width!==W||C.height!==H){C.width=W;C.height=H;gl.viewport(0,0,W,H);}
+}
+
+let mx=0,my=0,tmx=0,tmy=0;
+window.addEventListener('mousemove',e=>{
+  tmx=(e.clientX/innerWidth-.5)*2;
+  tmy=-(e.clientY/innerHeight-.5)*2;
+});
+
+const t0=performance.now();
+(function loop(now){
+  resize();
+  // Smooth mouse
+  mx+=(tmx-mx)*0.05; my+=(tmy-my)*0.05;
+  const t=(now-t0)*.001;
+  gl.useProgram(prog); gl.bindVertexArray(vao);
+  gl.uniform1f(uT,t);
+  gl.uniform2f(uR,W,H);
+  gl.uniform2f(uM,mx,my);
+  gl.drawArrays(gl.TRIANGLES,0,6);
+  requestAnimationFrame(loop);
+})(t0);
+
+// Scroll parallax hero text
+const heroContent=document.querySelector('.hero-content');
+window.addEventListener('scroll',()=>{
+  const y=scrollY;
+  if(y<innerHeight){
+    heroContent.style.transform=`translateY(${y*.22}px)`;
+    heroContent.style.opacity=1-(y/(innerHeight*.55));
+  }
+},{passive:true});
+
+// ═══ FEATURES CANVAS ════════════════════════════════════════
+const FC=document.getElementById('fc');
+const fctx=FC.getContext('2d');
+function resizeFC(){
+  const r=FC.parentElement.getBoundingClientRect();
+  FC.width=r.width; FC.height=r.height;
+}
+resizeFC(); new ResizeObserver(resizeFC).observe(FC.parentElement);
+
+// Dual icosahedra — outer + inner, counter-rotating
+const IV=[
+  [0,1,0],[.894,.447,0],[.276,.447,.851],[-.724,.447,.526],
+  [-.724,.447,-.526],[.276,.447,-.851],[.724,-.447,.526],
+  [-.276,-.447,.851],[-.894,-.447,0],[-.276,-.447,-.851],
+  [.724,-.447,-.526],[0,-1,0]
+];
+const IE=[[0,1],[0,2],[0,3],[0,4],[0,5],[1,2],[2,3],[3,4],[4,5],[5,1],
+  [1,6],[2,7],[3,8],[4,9],[5,10],[6,7],[7,8],[8,9],[9,10],[10,6],
+  [6,11],[7,11],[8,11],[9,11],[10,11]];
+
+function prj(v,ry,rx,sc,cx,cy){
+  let[x,y,z]=v;
+  const x2=x*Math.cos(ry)+z*Math.sin(ry);
+  const z1=-x*Math.sin(ry)+z*Math.cos(ry);
+  const y3=y*Math.cos(rx)-z1*Math.sin(rx);
+  const z3=y*Math.sin(rx)+z1*Math.cos(rx);
+  const f=680/(680+z3*sc);
+  return{sx:cx+x2*sc*f,sy:cy+y3*sc*f,z:z3};
+}
+
+let ft=0;
+(function animFC(){
+  const W2=FC.width,H2=FC.height;
+  fctx.clearRect(0,0,W2,H2);
+  const cx=W2/2,cy=H2/2;
+  const sc=Math.min(W2,H2)*.2;
+  const rx=.28+Math.sin(ft*.17)*.1;
+
+  // Outer icosahedron
+  const pv1=IV.map(v=>prj(v, ft*.32, rx,     sc,cx,cy));
+  // Inner (counter-rotate, smaller)
+  const pv2=IV.map(v=>prj(v,-ft*.45, rx+.6,  sc*.6,cx,cy));
+
+  function drawIco(pv,alpha){
+    for(const[a,b]of IE){
+      const pa=pv[a],pb=pv[b];
+      const d=((pa.z+pb.z)/2+1)/2;
+      fctx.beginPath();
+      fctx.moveTo(pa.sx,pa.sy);
+      fctx.lineTo(pb.sx,pb.sy);
+      fctx.strokeStyle=`rgba(255,255,255,${(0.03+d*.2)*alpha})`;
+      fctx.lineWidth=.7;
+      fctx.stroke();
+    }
+    for(const p of pv){
+      const d=(p.z+1)/2;
+      fctx.beginPath();
+      fctx.arc(p.sx,p.sy,1.6,0,Math.PI*2);
+      fctx.fillStyle=`rgba(255,255,255,${(0.08+d*.65)*alpha})`;
+      fctx.fill();
+    }
+  }
+
+  drawIco(pv1,1);
+  drawIco(pv2,.45);
+
+  ft+=.008;
+  requestAnimationFrame(animFC);
+})();
+
+// ═══ SCROLL-DRIVEN FEATURE HIGHLIGHTS ════════════════════════
+const feats=document.querySelectorAll('.feat');
+const sw=document.getElementById('sw');
+
+window.addEventListener('scroll',()=>{
+  const rect=sw.getBoundingClientRect();
+  const progress=(-rect.top)/(rect.height-innerHeight);
+  const idx=Math.min(feats.length-1, Math.floor(progress*(feats.length)));
+  feats.forEach((f,i)=>{
+    f.classList.toggle('on', i===Math.max(0,idx));
+  });
+},{passive:true});
+</script>
+</body>
+</html>

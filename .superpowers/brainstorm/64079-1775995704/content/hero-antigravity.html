@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saboor Siddiqui</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#060608;color:#fff;font-family:-apple-system,'Inter','SF Pro Display',sans-serif;overflow-x:hidden}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:30px 60px;
+  transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+nav.scrolled{
+  background:rgba(6,6,8,0.85);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  backdrop-filter:blur(20px);
+  padding:20px 60px;
+}
+.logo{font-size:12px;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,0.65)}
+.nav-links{display:flex;gap:44px}
+.nav-links a{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);text-decoration:none;transition:color 0.2s}
+.nav-links a:hover{color:rgba(255,255,255,0.8)}
+
+/* HERO */
+.hero{
+  position:relative;height:100vh;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  text-align:center;overflow:hidden;
+  cursor:none; /* hide default cursor */
+}
+#hero-canvas{
+  position:absolute;inset:0;width:100%;height:100%;display:block;
+}
+
+/* Custom cursor */
+#cursor{
+  position:fixed;z-index:9999;pointer-events:none;
+  width:12px;height:12px;border-radius:50%;
+  background:rgba(255,255,255,0.9);
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s,background 0.2s,width 0.3s,height 0.3s;
+  mix-blend-mode:difference;
+}
+#cursor-ring{
+  position:fixed;z-index:9998;pointer-events:none;
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(255,255,255,0.3);
+  transform:translate(-50%,-50%);
+  transition:transform 0.08s,width 0.4s cubic-bezier(0.16,1,0.3,1),height 0.4s cubic-bezier(0.16,1,0.3,1),opacity 0.3s;
+}
+
+.hero-content{
+  position:relative;z-index:2;pointer-events:none;
+  will-change:transform;
+}
+.eyebrow{
+  font-size:10px;letter-spacing:6px;text-transform:uppercase;
+  color:rgba(255,255,255,0.18);margin-bottom:30px;
+  animation:rise 1.4s cubic-bezier(0.16,1,0.3,1) 0.3s both;
+}
+.name-bold{
+  display:block;
+  font-size:clamp(76px,11.5vw,168px);
+  font-weight:800;
+  letter-spacing:-0.05em;
+  line-height:0.86;
+  background:linear-gradient(160deg,#ffffff 40%,rgba(255,255,255,0.55) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:rise 1.4s cubic-bezier(0.16,1,0.3,1) 0.48s both;
+}
+.name-thin{
+  display:block;
+  font-size:clamp(76px,11.5vw,168px);
+  font-weight:100;
+  letter-spacing:-0.05em;
+  line-height:0.86;
+  color:rgba(255,255,255,0.1);
+  animation:rise 1.4s cubic-bezier(0.16,1,0.3,1) 0.6s both;
+}
+.tagline{
+  margin-top:38px;margin-bottom:50px;
+  font-size:13px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,0.25);
+  animation:rise 1.4s cubic-bezier(0.16,1,0.3,1) 0.76s both;
+}
+.hero-btns{
+  display:flex;gap:14px;justify-content:center;
+  pointer-events:all;
+  animation:rise 1.4s cubic-bezier(0.16,1,0.3,1) 0.92s both;
+}
+.btn-w{
+  background:#fff;color:#000;
+  padding:14px 38px;border-radius:100px;
+  font-size:13px;font-weight:600;letter-spacing:0.3px;
+  text-decoration:none;cursor:pointer;
+  transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.btn-w:hover{background:rgba(255,255,255,0.85);transform:scale(1.05) translateY(-2px)}
+.btn-g{
+  background:transparent;color:rgba(255,255,255,0.45);
+  padding:14px 38px;border-radius:100px;
+  font-size:13px;letter-spacing:0.3px;
+  text-decoration:none;cursor:pointer;
+  border:1px solid rgba(255,255,255,0.1);
+  transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.btn-g:hover{color:#fff;border-color:rgba(255,255,255,0.35);transform:translateY(-2px)}
+
+.scroll-cue{
+  position:absolute;bottom:38px;left:50%;transform:translateX(-50%);
+  z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;
+  animation:fadeIn 2s 1.6s both;
+}
+.scroll-cue span{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.15)}
+.scroll-line{
+  width:1px;height:48px;
+  background:linear-gradient(to bottom,rgba(255,255,255,0.4),transparent);
+  animation:scan 2.8s ease-in-out infinite;
+}
+
+@keyframes rise{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scan{
+  0%{opacity:0;transform:scaleY(0);transform-origin:top}
+  45%{opacity:1;transform:scaleY(1);transform-origin:top}
+  85%{opacity:0;transform:scaleY(1);transform-origin:bottom}
+  100%{opacity:0}
+}
+
+/* STATS */
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1px solid rgba(255,255,255,0.04);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.stat{padding:60px 56px;text-align:center;border-right:1px solid rgba(255,255,255,0.04)}
+.stat:last-child{border-right:none}
+.stat-n{font-size:52px;font-weight:700;letter-spacing:-0.04em;color:rgba(255,255,255,0.85)}
+.stat-l{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-top:8px}
+
+/* STICKY */
+.sticky-wrap{position:relative;height:280vh}
+.sticky-inner{
+  position:sticky;top:0;height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+}
+.s-left{
+  position:relative;border-right:1px solid rgba(255,255,255,0.04);
+  background:#030304;display:flex;align-items:center;justify-content:center;
+}
+#feat-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.s-label{position:absolute;bottom:36px;left:36px;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.1)}
+.s-right{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 72px;
+}
+.feat{
+  padding:48px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+  opacity:0.15;
+  transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  transform:translateY(10px);
+}
+.feat:last-child{border-bottom:none}
+.feat.on{opacity:1;transform:translateY(0)}
+.feat-n{font-size:9px;letter-spacing:4px;color:rgba(255,255,255,0.18);margin-bottom:16px;text-transform:uppercase}
+.feat-h{font-size:36px;font-weight:600;letter-spacing:-0.025em;line-height:1.1;margin-bottom:14px;color:rgba(255,255,255,0.9)}
+.feat-p{font-size:14px;line-height:1.8;color:rgba(255,255,255,0.32);max-width:380px}
+
+/* CTA */
+.cta{padding:170px 56px 140px;text-align:center;position:relative;overflow:hidden}
+.cta-glow{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:800px;height:500px;
+  background:radial-gradient(ellipse,rgba(255,255,255,0.016) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cta-tag{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,0.16);margin-bottom:22px}
+.cta-h{font-size:clamp(44px,6vw,86px);font-weight:700;letter-spacing:-0.03em;line-height:.98;color:rgba(255,255,255,0.9);margin-bottom:16px}
+.cta-sub{font-size:15px;color:rgba(255,255,255,0.25);margin-bottom:50px;line-height:1.7}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.cta-w{padding:15px 40px;border-radius:100px;background:#fff;color:#000;font-size:14px;font-weight:600;text-decoration:none;transition:all 0.35s cubic-bezier(0.16,1,0.3,1)}
+.cta-w:hover{transform:translateY(-3px) scale(1.03);background:rgba(255,255,255,0.85)}
+.cta-b{padding:15px 40px;border-radius:100px;background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.1);font-size:14px;text-decoration:none;transition:all 0.35s cubic-bezier(0.16,1,0.3,1)}
+.cta-b:hover{color:#fff;border-color:rgba(255,255,255,0.35);transform:translateY(-3px)}
+
+footer{border-top:1px solid rgba(255,255,255,0.04);padding:28px 60px;display:flex;justify-content:space-between;align-items:center}
+footer p{font-size:10px;color:rgba(255,255,255,0.15);letter-spacing:1px}
+
+@media(max-width:768px){
+  nav{padding:24px 28px}
+  .nav-links{display:none}
+  .stats{grid-template-columns:1fr}
+  .stat{border-right:none}
+  .sticky-inner{grid-template-columns:1fr;grid-template-rows:40vh 1fr}
+  .s-right{padding:40px 28px}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav id="nav">
+  <div class="logo">Saboor</div>
+  <div class="nav-links">
+    <a href="#">Work</a><a href="#">About</a>
+    <a href="https://github.com/saboor-siddiqui" target="_blank">GitHub</a>
+    <a href="#">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content" id="heroContent">
+    <p class="eyebrow">Software Engineer &nbsp;·&nbsp; Builder &nbsp;·&nbsp; Craftsman</p>
+    <span class="name-bold">SABOOR</span>
+    <span class="name-thin">SIDDIQUI</span>
+    <p class="tagline">Engineering that moves people</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-w">View Work</a>
+      <a href="https://github.com/saboor-siddiqui" class="btn-g" target="_blank">GitHub ↗</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<div class="stats">
+  <div class="stat"><div class="stat-n">5+</div><div class="stat-l">Years experience</div></div>
+  <div class="stat"><div class="stat-n">20+</div><div class="stat-l">Projects shipped</div></div>
+  <div class="stat"><div class="stat-n">∞</div><div class="stat-l">Lines of passion</div></div>
+</div>
+
+<div class="sticky-wrap" id="sw">
+  <div class="sticky-inner">
+    <div class="s-left">
+      <canvas id="feat-canvas"></canvas>
+      <div class="s-label">Expertise</div>
+    </div>
+    <div class="s-right">
+      <div class="feat on">
+        <div class="feat-n">01 — Engineering</div>
+        <div class="feat-h">Full-Stack<br>Mastery</div>
+        <div class="feat-p">From API design to pixel-perfect UI. Building systems that are fast, reliable, and a joy to maintain. TypeScript, React, Node — whatever the problem demands.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-n">02 — Architecture</div>
+        <div class="feat-h">Systems Built<br>to Last</div>
+        <div class="feat-p">Beyond CRUD. Distributed systems, event-driven architectures, deployment pipelines that don't page you at 3am. Engineered for the long run.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-n">03 — Craft</div>
+        <div class="feat-h">The Details<br>That Feel Right</div>
+        <div class="feat-p">The 10ms animation. The loading state that isn't jarring. The error message that's actually helpful. Craft that turns software into experience.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="cta">
+  <div class="cta-glow"></div>
+  <p class="cta-tag">Let's connect</p>
+  <h2 class="cta-h">Ready to build<br>something great?</h2>
+  <p class="cta-sub">Open to new opportunities, collaborations,<br>and interesting problems.</p>
+  <div class="cta-btns">
+    <a href="https://www.linkedin.com/in/saboor-siddiqui-6a0659188/" class="cta-w" target="_blank">Connect on LinkedIn</a>
+    <a href="https://github.com/saboor-siddiqui" class="cta-b" target="_blank">GitHub ↗</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Saboor Siddiqui</p>
+  <p style="font-size:9px;color:rgba(255,255,255,0.08);letter-spacing:2px">CRAFTED WITH OBSESSION</p>
+</footer>
+
+<script>
+'use strict';
+
+// ── Custom cursor ──────────────────────────────────────────────
+const cur = document.getElementById('cursor');
+const curR = document.getElementById('cursor-ring');
+let cx2=innerWidth/2, cy2=innerHeight/2;
+let tx=cx2, ty=cy2;
+document.addEventListener('mousemove', e => { tx=e.clientX; ty=e.clientY; });
+(function moveCursor(){
+  cx2 += (tx-cx2)*0.15;
+  cy2 += (ty-cy2)*0.15;
+  cur.style.left  = tx+'px';  cur.style.top  = ty+'px';
+  curR.style.left = cx2+'px'; curR.style.top = cy2+'px';
+  requestAnimationFrame(moveCursor);
+})();
+
+// ── Hero Canvas: Gravity Field Particles ──────────────────────
+const HC  = document.getElementById('hero-canvas');
+const hCtx = HC.getContext('2d');
+let HW, HH, mx=0, my=0, tmx=0, tmy=0;
+
+function resizeHero(){
+  HW = HC.width  = HC.clientWidth;
+  HH = HC.height = HC.clientHeight;
+}
+resizeHero();
+window.addEventListener('resize', resizeHero, {passive:true});
+
+// Smooth mouse
+document.addEventListener('mousemove', e => { tmx=e.clientX; tmy=e.clientY; });
+
+// ── Particle types ─────────────────────────────────────────────
+// Layer structure: z=0 far/dim, z=1 near/bright
+// Types: dot, ring, cross, triangle (wireframe)
+const PARTICLE_COUNT = 110;
+
+function randBetween(a,b){ return a + Math.random()*(b-a); }
+function randSign(){ return Math.random()<.5?1:-1; }
+
+const particles = Array.from({length: PARTICLE_COUNT}, (_, i) => {
+  const z     = Math.random();           // depth 0=far, 1=near
+  const layer = z > .6 ? 2 : z > .3 ? 1 : 0;
+  const types = ['dot','dot','dot','ring','ring','cross','tri'];
+  const type  = types[Math.floor(Math.random()*types.length)];
+  const size  = randBetween(1.5, 5) * (0.5 + z*.7);
+  return {
+    x : randBetween(0, 1) * window.innerWidth,
+    y : randBetween(0, 1) * window.innerHeight,
+    vx: randSign() * randBetween(.02, .18),
+    vy: randSign() * randBetween(.02, .18),
+    z, layer, type, size,
+    baseAlpha: 0.06 + z * 0.3,
+    angle: Math.random() * Math.PI * 2,
+    angV : (Math.random()-.5) * 0.005,
+    mass : 0.4 + z * 0.8,
+    // home position (for soft return)
+    hx: 0, hy: 0,
+  };
+});
+
+// spread home positions in a loose sphere arrangement
+const spread = ()=>{
+  const cx = HW/2, cy = HH/2;
+  particles.forEach(p => {
+    const r   = randBetween(60, Math.min(HW,HH)*0.42);
+    const ang = Math.random()*Math.PI*2;
+    p.hx = cx + Math.cos(ang)*r;
+    p.hy = cy + Math.sin(ang)*r;
+    p.x  = cx + (Math.random()-.5)*HW;
+    p.y  = cy + (Math.random()-.5)*HH;
+  });
+};
+spread();
+window.addEventListener('resize', ()=>{ resizeHero(); spread(); }, {passive:true});
+
+// Draw shapes
+function drawShape(ctx, type, x, y, size, angle, alpha){
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.translate(x,y);
+  ctx.rotate(angle);
+
+  if(type === 'dot'){
+    ctx.beginPath();
+    ctx.arc(0,0,size,0,Math.PI*2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+
+  } else if(type === 'ring'){
+    ctx.beginPath();
+    ctx.arc(0,0,size*2.5,0,Math.PI*2);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth   = 0.7;
+    ctx.stroke();
+
+  } else if(type === 'cross'){
+    const s = size*2;
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth   = 0.8;
+    ctx.beginPath(); ctx.moveTo(-s,0); ctx.lineTo(s,0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,-s); ctx.lineTo(0,s); ctx.stroke();
+
+  } else if(type === 'tri'){
+    const s = size*2.8;
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth   = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(0,-s);
+    ctx.lineTo( s*.866, s*.5);
+    ctx.lineTo(-s*.866, s*.5);
+    ctx.closePath();
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// Physics constants
+const GRAVITY_PULL   =  6000;   // mouse attraction strength
+const REPEL_DIST     =  120;    // distance at which mouse repels
+const REPEL_STRENGTH =  8000;   // repulsion when too close
+const HOME_SPRING    =  0.018;  // gentle return to home
+const DAMPING        =  0.965;  // velocity damping
+
+let lastT = 0;
+function heroLoop(ts){
+  const dt = Math.min((ts - lastT) / 16.67, 3); lastT = ts;
+  hCtx.clearRect(0,0,HW,HH);
+
+  // Smooth mouse
+  mx += (tmx-mx)*0.08;
+  my += (tmy-my)*0.08;
+
+  particles.forEach(p => {
+    const dx = mx - p.x;
+    const dy = my - p.y;
+    const dist = Math.sqrt(dx*dx+dy*dy) + 1;
+
+    // Antigravity zone: repel close, attract far
+    let fx=0, fy=0;
+    if(dist < REPEL_DIST){
+      // repel
+      const force = (REPEL_STRENGTH / (dist*dist)) * p.mass;
+      fx = -(dx/dist)*force;
+      fy = -(dy/dist)*force;
+    } else {
+      // attract gently
+      const force = (GRAVITY_PULL / (dist*dist+500)) * p.mass;
+      fx = (dx/dist)*force;
+      fy = (dy/dist)*force;
+    }
+
+    // Soft spring back to home
+    fx += (p.hx - p.x) * HOME_SPRING;
+    fy += (p.hy - p.y) * HOME_SPRING;
+
+    // Integrate
+    p.vx = (p.vx + fx * 0.016 * dt) * DAMPING;
+    p.vy = (p.vy + fy * 0.016 * dt) * DAMPING;
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.angle += p.angV * dt;
+
+    // Wrap edges softly
+    const pad = 60;
+    if(p.x < -pad)  p.x = HW+pad;
+    if(p.x > HW+pad) p.x = -pad;
+    if(p.y < -pad)  p.y = HH+pad;
+    if(p.y > HH+pad) p.y = -pad;
+
+    // Distance from mouse: boost alpha when close
+    const proximity = Math.max(0, 1 - dist/350);
+    const alpha = p.baseAlpha + proximity * 0.4;
+
+    drawShape(hCtx, p.type, p.x, p.y, p.size, p.angle, alpha);
+  });
+
+  // Draw faint connection lines between nearby particles
+  for(let i=0; i<particles.length; i++){
+    for(let j=i+1; j<particles.length; j++){
+      const a=particles[i], b=particles[j];
+      const dx=a.x-b.x, dy=a.y-b.y;
+      const d=dx*dx+dy*dy;
+      if(d < 9000){
+        const alpha = (1 - d/9000) * 0.06;
+        hCtx.beginPath();
+        hCtx.moveTo(a.x,a.y); hCtx.lineTo(b.x,b.y);
+        hCtx.strokeStyle=`rgba(255,255,255,${alpha})`;
+        hCtx.lineWidth=0.5;
+        hCtx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(heroLoop);
+}
+requestAnimationFrame(heroLoop);
+
+// ── Hero parallax on scroll ────────────────────────────────────
+const heroContent = document.getElementById('heroContent');
+window.addEventListener('scroll',()=>{
+  const y = scrollY;
+  if(y < innerHeight){
+    heroContent.style.transform = `translateY(${y*.2}px)`;
+    heroContent.style.opacity   = 1-(y/(innerHeight*.55));
+  }
+},{passive:true});
+
+// ── Nav scroll ────────────────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled', scrollY>30);
+},{passive:true});
+
+// ── Sticky features highlight ──────────────────────────────────
+const feats = document.querySelectorAll('.feat');
+const sw    = document.getElementById('sw');
+window.addEventListener('scroll',()=>{
+  const rect     = sw.getBoundingClientRect();
+  const progress = (-rect.top) / (rect.height - innerHeight);
+  const idx      = Math.max(0, Math.min(feats.length-1, Math.floor(progress * feats.length)));
+  feats.forEach((f,i) => f.classList.toggle('on', i===idx));
+},{passive:true});
+
+// ── Features canvas: gravity field mini ───────────────────────
+const FC   = document.getElementById('feat-canvas');
+const fctx = FC.getContext('2d');
+function resizeFC(){
+  const r=FC.parentElement.getBoundingClientRect();
+  FC.width=r.width; FC.height=r.height;
+}
+resizeFC(); new ResizeObserver(resizeFC).observe(FC.parentElement);
+
+// Mini particle system for features panel
+const FN = 60;
+const fparts = Array.from({length:FN}, ()=>({
+  x: Math.random()*800,
+  y: Math.random()*800,
+  vx:(Math.random()-.5)*.3,
+  vy:(Math.random()-.5)*.3,
+  r: randBetween(1,3.5),
+  alpha: randBetween(0.04,0.22),
+}));
+
+let fmx=0, fmy=0, ftmx=0, ftmy=0;
+FC.parentElement.addEventListener('mousemove', e=>{
+  const r=FC.getBoundingClientRect();
+  ftmx=e.clientX-r.left; ftmy=e.clientY-r.top;
+});
+
+(function featLoop(){
+  const FW=FC.width, FH=FC.height;
+  fctx.clearRect(0,0,FW,FH);
+  fmx+=(ftmx-fmx)*.08; fmy+=(ftmy-fmy)*.08;
+
+  fparts.forEach(p=>{
+    const dx=fmx-p.x, dy=fmy-p.y;
+    const d=Math.sqrt(dx*dx+dy*dy)+1;
+    if(d<100){
+      p.vx-=(dx/d)*4/d; p.vy-=(dy/d)*4/d;
+    } else {
+      p.vx+=(FW/2-p.x)*.001; p.vy+=(FH/2-p.y)*.001;
+    }
+    p.vx*=.95; p.vy*=.95;
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0)p.x=FW; if(p.x>FW)p.x=0;
+    if(p.y<0)p.y=FH; if(p.y>FH)p.y=0;
+
+    const prox=Math.max(0,1-d/200);
+    fctx.beginPath();
+    fctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    fctx.fillStyle=`rgba(255,255,255,${p.alpha+prox*.3})`;
+    fctx.fill();
+  });
+
+  // Connection lines
+  for(let i=0;i<fparts.length;i++){
+    for(let j=i+1;j<fparts.length;j++){
+      const a=fparts[i],b=fparts[j];
+      const dx=a.x-b.x,dy=a.y-b.y,d=dx*dx+dy*dy;
+      if(d<7000){
+        fctx.beginPath();
+        fctx.moveTo(a.x,a.y);fctx.lineTo(b.x,b.y);
+        fctx.strokeStyle=`rgba(255,255,255,${(1-d/7000)*.07})`;
+        fctx.lineWidth=.5; fctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(featLoop);
+})();
+</script>
+</body>
+</html>

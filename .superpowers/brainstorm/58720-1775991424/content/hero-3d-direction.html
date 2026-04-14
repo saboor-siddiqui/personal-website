@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero 3D Direction</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #fff; font-family: -apple-system, 'Inter', sans-serif; padding: 32px; min-height: 100vh; }
+  h2 { font-size: 22px; font-weight: 600; margin-bottom: 8px; color: #fff; }
+  .subtitle { color: #888; font-size: 14px; margin-bottom: 36px; }
+
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .card {
+    border: 2px solid #222;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover { border-color: #2997ff; transform: translateY(-4px); }
+  .card.selected { border-color: #2997ff; box-shadow: 0 0 0 1px #2997ff, 0 0 30px rgba(41,151,255,0.2); }
+
+  .card-preview {
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Option A: Particle Field */
+  .preview-a {
+    background: #000;
+  }
+  .preview-a canvas-mock {
+    display: block; width: 100%; height: 100%;
+  }
+  .stars-container {
+    position: absolute; inset: 0;
+  }
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle { 0%,100%{opacity:0.2} 50%{opacity:1} }
+  .geometric-shape {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotateX(20deg) rotateY(45deg);
+    width: 80px; height: 80px;
+    border: 1.5px solid rgba(41,151,255,0.8);
+    animation: rotate3d 8s linear infinite;
+  }
+  .geometric-shape::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 1.5px solid rgba(41,151,255,0.4);
+    animation: rotate3d 4s linear infinite reverse;
+  }
+  .geometric-shape::after {
+    content: '';
+    position: absolute;
+    inset: 24px;
+    border: 1.5px solid rgba(41,151,255,0.2);
+  }
+  @keyframes rotate3d { to { transform: translate(-50%, -50%) rotateX(380deg) rotateY(405deg); } }
+
+  /* Option B: Neural Net / Mesh */
+  .preview-b {
+    background: radial-gradient(ellipse at center, #0d1b2a 0%, #000 70%);
+  }
+  .mesh-container { position: absolute; inset: 0; }
+  .mesh-line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, rgba(41,151,255,0.4), transparent);
+    height: 1px;
+    animation: mesh-pulse 4s ease-in-out infinite;
+  }
+  .mesh-dot {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: #2997ff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #2997ff;
+    animation: dot-pulse 2s ease-in-out infinite;
+  }
+  @keyframes mesh-pulse { 0%,100%{opacity:0.2} 50%{opacity:0.8} }
+  @keyframes dot-pulse { 0%,100%{transform:scale(1);opacity:0.6} 50%{transform:scale(1.6);opacity:1} }
+  .globe-ring {
+    position: absolute; top: 50%; left: 50%;
+    width: 100px; height: 100px;
+    border: 1px solid rgba(41,151,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) rotateX(70deg);
+    animation: globe-spin 6s linear infinite;
+  }
+  .globe-ring:nth-child(2) {
+    width: 130px; height: 130px;
+    border-color: rgba(41,151,255,0.15);
+    animation-duration: 10s;
+    animation-direction: reverse;
+  }
+  .globe-ring:nth-child(3) {
+    width: 70px; height: 70px;
+    border-color: rgba(41,151,255,0.5);
+    animation-duration: 4s;
+    transform: translate(-50%, -50%) rotateX(70deg) rotateY(30deg);
+  }
+  @keyframes globe-spin { to { transform: translate(-50%, -50%) rotateX(70deg) rotate(360deg); } }
+
+  /* Option C: Dark Matter / Nebula */
+  .preview-c {
+    background: #000;
+    overflow: hidden;
+  }
+  .nebula-layer {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    animation: nebula-drift 8s ease-in-out infinite;
+  }
+  .nebula-1 { width: 200px; height: 200px; background: rgba(41,151,255,0.15); top: -20%; left: -10%; animation-delay: 0s; }
+  .nebula-2 { width: 150px; height: 150px; background: rgba(120,60,255,0.12); top: 30%; right: -5%; animation-delay: 2s; }
+  .nebula-3 { width: 120px; height: 120px; background: rgba(0,210,255,0.1); bottom: -10%; left: 30%; animation-delay: 4s; }
+  @keyframes nebula-drift { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(15px,-10px) scale(1.1)} }
+  .comet {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #2997ff, #fff);
+    animation: comet-fly 6s ease-in-out infinite;
+    transform-origin: left center;
+  }
+  .comet-1 { width: 80px; top: 30%; left: 10%; transform: rotate(-20deg); animation-delay: 0s; }
+  .comet-2 { width: 50px; top: 60%; left: 40%; transform: rotate(-15deg); animation-delay: 3s; }
+  @keyframes comet-fly { 0%{opacity:0;transform:translateX(-20px) rotate(-20deg)} 30%{opacity:1} 70%{opacity:1} 100%{opacity:0;transform:translateX(60px) rotate(-20deg)} }
+  .crystal {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  .crystal-ring {
+    position: absolute; top: 50%; left: 50%;
+    border-radius: 50%;
+    border: 1px solid;
+    animation: crystal-pulse 3s ease-in-out infinite;
+  }
+  .crystal-ring:nth-child(1) { width: 60px; height: 60px; margin: -30px; border-color: rgba(41,151,255,0.8); box-shadow: 0 0 20px rgba(41,151,255,0.3); }
+  .crystal-ring:nth-child(2) { width: 90px; height: 90px; margin: -45px; border-color: rgba(41,151,255,0.4); animation-delay: 0.5s; }
+  .crystal-ring:nth-child(3) { width: 120px; height: 120px; margin: -60px; border-color: rgba(41,151,255,0.2); animation-delay: 1s; }
+  @keyframes crystal-pulse { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.08)} }
+
+  .card-body { padding: 20px; }
+  .letter { font-size: 11px; font-weight: 700; color: #2997ff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .card-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .card-desc { font-size: 13px; color: #888; line-height: 1.5; }
+  .tag { display: inline-block; background: rgba(41,151,255,0.1); border: 1px solid rgba(41,151,255,0.3); color: #2997ff; font-size: 10px; padding: 2px 8px; border-radius: 20px; margin-top: 10px; letter-spacing: 0.5px; }
+
+  .selected-indicator {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #2997ff; color: #000; padding: 10px 28px; border-radius: 100px;
+    font-size: 14px; font-weight: 600; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    white-space: nowrap;
+  }
+  .selected-indicator.visible { opacity: 1; }
+</style>
+</head>
+<body>
+<h2>Which 3D visual direction for your hero?</h2>
+<p class="subtitle">Pick the aesthetic that feels most "you" — this sets the tone for the whole page</p>
+
+<div class="cards">
+
+  <!-- Option A -->
+  <div class="card" data-choice="a" onclick="selectCard(this)">
+    <div class="card-preview preview-a">
+      <div class="stars-container" id="stars"></div>
+      <div class="geometric-shape"></div>
+    </div>
+    <div class="card-body">
+      <div class="letter">Option A</div>
+      <div class="card-title">Geometric Cosmos</div>
+      <div class="card-desc">Rotating wireframe geometry on a star field. Clean, technical precision — SpaceX / Linear vibes.</div>
+      <span class="tag">TECHNICAL · PRECISE · FUTURISTIC</span>
+    </div>
+  </div>
+
+  <!-- Option B -->
+  <div class="card" data-choice="b" onclick="selectCard(this)">
+    <div class="card-preview preview-b">
+      <div class="mesh-container">
+        <div class="globe-ring"></div>
+        <div class="globe-ring"></div>
+        <div class="globe-ring"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="letter">Option B</div>
+      <div class="card-title">Neural Network Globe</div>
+      <div class="card-desc">Interconnected mesh rings orbiting a central point. Dense, intelligent, data-driven — Google DeepMind / OpenAI vibes.</div>
+      <span class="tag">INTELLIGENT · CONNECTED · DEEP</span>
+    </div>
+  </div>
+
+  <!-- Option C -->
+  <div class="card" data-choice="c" onclick="selectCard(this)">
+    <div class="card-preview preview-c">
+      <div class="nebula-layer nebula-1"></div>
+      <div class="nebula-layer nebula-2"></div>
+      <div class="nebula-layer nebula-3"></div>
+      <div class="comet comet-1"></div>
+      <div class="comet comet-2"></div>
+      <div class="crystal">
+        <div class="crystal-ring"></div>
+        <div class="crystal-ring"></div>
+        <div class="crystal-ring"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="letter">Option C</div>
+      <div class="card-title">Dark Matter Nebula</div>
+      <div class="card-desc">Soft nebula bloom with light particles and concentric pulse rings. Ethereal, cinematic — Apple Vision Pro / Stripe vibes.</div>
+      <span class="tag">ETHEREAL · CINEMATIC · PREMIUM</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="selected-indicator" id="indicator">✓ Selection recorded — reply in terminal</div>
+
+<script>
+// Generate stars for Option A
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 60; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2 + 0.5;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    top:${Math.random()*100}%; left:${Math.random()*100}%;
+    animation-delay:${Math.random()*3}s;
+    animation-duration:${2+Math.random()*3}s;
+    opacity:${Math.random()*0.6+0.2};
+  `;
+  starsEl.appendChild(s);
+}
+
+// Add mesh dots and lines for Option B
+const meshEl = document.querySelector('.mesh-container');
+for (let i = 0; i < 12; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'mesh-dot';
+  dot.style.cssText = `top:${15+Math.random()*70}%; left:${10+Math.random()*80}%; animation-delay:${Math.random()*2}s;`;
+  meshEl.appendChild(dot);
+}
+for (let i = 0; i < 5; i++) {
+  const line = document.createElement('div');
+  line.className = 'mesh-line';
+  line.style.cssText = `width:${40+Math.random()*60}%; top:${20+i*15}%; left:${Math.random()*20}%; animation-delay:${i*0.8}s;`;
+  meshEl.appendChild(line);
+}
+
+function selectCard(el) {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const choice = el.dataset.choice.toUpperCase();
+  const title = el.querySelector('.card-title').textContent;
+  document.getElementById('indicator').textContent = `✓ Option ${choice} selected: ${title} — reply in terminal`;
+  document.getElementById('indicator').classList.add('visible');
+
+  // Log to events file via fetch (companion protocol)
+  try {
+    fetch('/select', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({type:'click', choice: el.dataset.choice, text: `Option ${choice}: ${title}`})
+    });
+  } catch(e) {}
+}
+</script>
+</body>
+</html>

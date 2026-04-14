@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Mockup — Saboor Siddiqui</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#060606; color:#fff; font-family:-apple-system,'Inter',sans-serif; overflow-x:hidden; }
+
+/* ── HEADER ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:24px 48px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  backdrop-filter:blur(20px);
+  background:rgba(6,6,6,0.7);
+}
+.nav-logo { font-size:14px; font-weight:500; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.9); }
+.nav-links { display:flex; gap:36px; }
+.nav-links a { font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.4); text-decoration:none; transition:color 0.2s; }
+.nav-links a:hover { color:rgba(255,255,255,0.9); }
+
+/* ── HERO ── */
+.hero {
+  position:relative; height:100vh; display:flex;
+  flex-direction:column; justify-content:center; align-items:center;
+  text-align:center; overflow:hidden;
+}
+#hero-canvas {
+  position:absolute; inset:0; width:100%; height:100%;
+}
+.hero-content {
+  position:relative; z-index:2;
+}
+.hero-eyebrow {
+  font-size:11px; letter-spacing:4px; text-transform:uppercase;
+  color:rgba(255,255,255,0.35); margin-bottom:24px;
+}
+.hero-name {
+  font-size:clamp(52px, 8vw, 110px);
+  font-weight:700;
+  letter-spacing:-0.03em;
+  line-height:0.95;
+  background:linear-gradient(135deg, #ffffff 30%, rgba(255,255,255,0.45) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  margin-bottom:8px;
+}
+.hero-name-last {
+  font-size:clamp(52px, 8vw, 110px);
+  font-weight:200;
+  letter-spacing:-0.03em;
+  line-height:0.95;
+  color:rgba(255,255,255,0.25);
+  display:block;
+}
+.hero-title {
+  font-size:14px; color:rgba(255,255,255,0.4);
+  letter-spacing:2px; text-transform:uppercase;
+  margin-top:28px; margin-bottom:40px;
+}
+.hero-cta {
+  display:inline-flex; gap:16px; align-items:center; flex-wrap:wrap; justify-content:center;
+}
+.btn-primary {
+  background:#fff; color:#000;
+  padding:13px 32px; border-radius:100px;
+  font-size:13px; font-weight:600; letter-spacing:0.5px;
+  text-decoration:none; transition:all 0.3s cubic-bezier(0.16,1,0.3,1);
+  border:none; cursor:pointer;
+}
+.btn-primary:hover { background:rgba(255,255,255,0.88); transform:scale(1.03); }
+.btn-ghost {
+  background:transparent; color:rgba(255,255,255,0.6);
+  padding:13px 32px; border-radius:100px;
+  font-size:13px; font-weight:400; letter-spacing:0.5px;
+  text-decoration:none; transition:all 0.3s;
+  border:1px solid rgba(255,255,255,0.12);
+  cursor:pointer;
+}
+.btn-ghost:hover { color:#fff; border-color:rgba(255,255,255,0.35); }
+
+.scroll-hint {
+  position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+  z-index:2; display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.scroll-hint span { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.2); }
+.scroll-line {
+  width:1px; height:48px;
+  background:linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0));
+  animation:scroll-drop 2s ease-in-out infinite;
+}
+@keyframes scroll-drop { 0%{opacity:0;transform:scaleY(0);transform-origin:top} 50%{opacity:1;transform:scaleY(1)} 100%{opacity:0;transform:scaleY(1);transform-origin:bottom} }
+
+/* ── SECTION LABEL ── */
+.section-label {
+  padding:180px 48px 0;
+  text-align:center;
+}
+.section-label p {
+  font-size:11px; letter-spacing:4px; color:rgba(255,255,255,0.2);
+  text-transform:uppercase; margin-bottom:60px;
+}
+
+/* ── FEATURES STICKY ── */
+.sticky-section {
+  position:relative; height:300vh;
+}
+.sticky-inner {
+  position:sticky; top:0; height:100vh;
+  display:grid; grid-template-columns:1fr 1fr;
+  overflow:hidden;
+}
+.sticky-visual {
+  position:relative; display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,0.01);
+  border-right:1px solid rgba(255,255,255,0.04);
+}
+#feat-canvas { width:100%; height:100%; display:block; }
+.sticky-panels {
+  display:flex; flex-direction:column; justify-content:center;
+  padding:80px 64px;
+}
+.feat-panel { margin-bottom:80px; }
+.feat-number { font-size:11px; color:rgba(255,255,255,0.18); letter-spacing:3px; margin-bottom:16px; }
+.feat-title { font-size:32px; font-weight:600; line-height:1.15; margin-bottom:16px; color:rgba(255,255,255,0.9); }
+.feat-body { font-size:15px; line-height:1.7; color:rgba(255,255,255,0.4); max-width:380px; }
+
+/* ── CTA SECTION ── */
+.cta-section {
+  text-align:center;
+  padding:180px 48px 120px;
+  position:relative; overflow:hidden;
+}
+.cta-glow {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:600px; height:400px;
+  background:radial-gradient(ellipse, rgba(255,255,255,0.03) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cta-label { font-size:11px; letter-spacing:4px; color:rgba(255,255,255,0.25); text-transform:uppercase; margin-bottom:24px; }
+.cta-headline { font-size:clamp(36px,5vw,72px); font-weight:700; letter-spacing:-0.02em; line-height:1.05; margin-bottom:20px; color:rgba(255,255,255,0.92); }
+.cta-sub { font-size:16px; color:rgba(255,255,255,0.35); margin-bottom:48px; }
+.cta-links { display:flex; gap:20px; justify-content:center; align-items:center; flex-wrap:wrap; }
+.cta-link {
+  padding:14px 36px; border-radius:100px;
+  font-size:14px; font-weight:500; text-decoration:none; letter-spacing:0.3px;
+  transition:all 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.cta-link.white { background:#fff; color:#000; }
+.cta-link.white:hover { background:rgba(255,255,255,0.88); transform:translateY(-2px); }
+.cta-link.border { border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); }
+.cta-link.border:hover { border-color:rgba(255,255,255,0.4); color:#fff; transform:translateY(-2px); }
+
+/* ── FOOTER ── */
+footer {
+  border-top:1px solid rgba(255,255,255,0.05);
+  padding:32px 48px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+footer p { font-size:11px; color:rgba(255,255,255,0.2); letter-spacing:1px; }
+
+/* ── DESIGN NOTES ── */
+.design-note {
+  position:fixed; bottom:20px; right:20px; z-index:999;
+  background:rgba(255,255,255,0.06); backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.1); border-radius:12px;
+  padding:14px 18px; max-width:240px;
+}
+.design-note p { font-size:11px; color:rgba(255,255,255,0.5); line-height:1.5; margin-bottom:8px; }
+.design-note strong { color:rgba(255,255,255,0.8); }
+.dn-btn {
+  font-size:11px; font-weight:600; color:#fff; background:rgba(255,255,255,0.12);
+  border:none; padding:6px 14px; border-radius:100px; cursor:pointer; margin-right:6px;
+  transition:background 0.2s;
+}
+.dn-btn:hover { background:rgba(255,255,255,0.2); }
+.dn-btn.active { background:rgba(255,255,255,0.25); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Saboor</div>
+  <div class="nav-links">
+    <a href="#">Work</a>
+    <a href="#">About</a>
+    <a href="#">GitHub</a>
+    <a href="#">Contact</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Software Engineer · Builder · Creator</p>
+    <div class="hero-name">SABOOR<span class="hero-name-last">SIDDIQUI</span></div>
+    <p class="hero-title">Crafting experiences that matter</p>
+    <div class="hero-cta">
+      <a href="#" class="btn-primary">View Work</a>
+      <a href="#" class="btn-ghost">GitHub ↗</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── STICKY FEATURES (placeholder content — to be defined) ── -->
+<div class="section-label">
+  <p>What I do</p>
+</div>
+<div class="sticky-section">
+  <div class="sticky-inner">
+    <div class="sticky-visual">
+      <canvas id="feat-canvas"></canvas>
+    </div>
+    <div class="sticky-panels">
+      <div class="feat-panel">
+        <div class="feat-number">01</div>
+        <div class="feat-title">Full-Stack<br>Engineering</div>
+        <div class="feat-body">Building scalable systems from API to UI. Obsessed with performance, clarity, and code that lasts.</div>
+      </div>
+      <div class="feat-panel">
+        <div class="feat-number">02</div>
+        <div class="feat-title">Systems that<br>Scale</div>
+        <div class="feat-body">From architecture decisions to deployment pipelines — engineering for reliability at any scale.</div>
+      </div>
+      <div class="feat-panel">
+        <div class="feat-number">03</div>
+        <div class="feat-title">Crafted<br>Interfaces</div>
+        <div class="feat-body">Interfaces aren't just functional — they're felt. Precision animations, obsessive attention to detail.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <p class="cta-label">Let's build something</p>
+  <h2 class="cta-headline">Ready to<br>make it real?</h2>
+  <p class="cta-sub">Open to opportunities, collaborations, and big ideas.</p>
+  <div class="cta-links">
+    <a href="https://www.linkedin.com/in/saboor-siddiqui-6a0659188/" class="cta-link white">Connect on LinkedIn</a>
+    <a href="https://github.com/saboor-siddiqui" class="cta-link border">GitHub ↗</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Saboor Siddiqui</p>
+  <p>Built with obsessive attention to detail</p>
+</footer>
+
+<!-- Design selector -->
+<div class="design-note">
+  <p><strong>Hero 3D style</strong> — toggle to compare:</p>
+  <button class="dn-btn active" onclick="setStyle('sphere')" id="btn-sphere">Particle Sphere</button>
+  <button class="dn-btn" onclick="setStyle('fluid')" id="btn-fluid">Fluid Rings</button>
+</div>
+
+<script>
+// ─── HERO CANVAS: Particle Sphere (default) ─────────────────
+const heroCanvas = document.getElementById('hero-canvas');
+const hCtx = heroCanvas.getContext('2d');
+let heroW, heroH, heroAnim;
+let currentStyle = 'sphere';
+
+function resizeHero() {
+  heroCanvas.width = heroW = window.innerWidth;
+  heroCanvas.height = heroH = window.innerHeight;
+}
+resizeHero();
+window.addEventListener('resize', resizeHero);
+
+// ── Style A: Particle Sphere ──
+const PHI = Math.PI * (3 - Math.sqrt(5));
+const N = 3000;
+const spherePts = Array.from({length:N}, (_,i) => {
+  const y = 1 - (i/(N-1))*2;
+  const r = Math.sqrt(Math.max(0, 1-y*y));
+  const theta = PHI * i;
+  return { x:Math.cos(theta)*r, y, z:Math.sin(theta)*r };
+});
+
+let rotY = 0, rotX = 0.2;
+let mouseX = 0, mouseY = 0;
+window.addEventListener('mousemove', e => {
+  mouseX = (e.clientX/window.innerWidth - 0.5) * 0.4;
+  mouseY = (e.clientY/window.innerHeight - 0.5) * 0.2;
+});
+
+function drawSphere(ts) {
+  hCtx.clearRect(0,0,heroW,heroH);
+  const cx = heroW/2, cy = heroH/2;
+  const scale = Math.min(heroW, heroH) * 0.28;
+  const fov = 900;
+
+  const ry = rotY + mouseX;
+  const rx = rotX + mouseY;
+
+  const projected = spherePts.map(p => {
+    const y1 = p.y*Math.cos(rx) - p.z*Math.sin(rx);
+    const z1 = p.y*Math.sin(rx) + p.z*Math.cos(rx);
+    const x2 = p.x*Math.cos(ry) + z1*Math.sin(ry);
+    const z2 = -p.x*Math.sin(ry) + z1*Math.cos(ry);
+    const persp = fov/(fov + z2*scale);
+    return { sx:cx+x2*scale*persp, sy:cy+y1*scale*persp, z:z2, depth:(z2+1)/2, persp };
+  }).sort((a,b) => a.z-b.z);
+
+  for (const p of projected) {
+    const alpha = 0.08 + p.depth * 0.7;
+    const brightness = 180 + p.depth * 75;
+    const size = Math.max(0.4, p.persp * 1.5);
+    hCtx.beginPath();
+    hCtx.arc(p.sx, p.sy, size, 0, Math.PI*2);
+    hCtx.fillStyle = `rgba(${brightness},${brightness-5},${brightness-15},${alpha})`;
+    hCtx.fill();
+  }
+
+  rotY += 0.003;
+  heroAnim = requestAnimationFrame(drawSphere);
+}
+
+// ── Style B: Fluid Concentric Rings ──
+function drawFluid(ts) {
+  hCtx.clearRect(0,0,heroW,heroH);
+  const cx = heroW/2, cy = heroH/2;
+  const t = ts * 0.0005;
+
+  for (let ring = 0; ring < 12; ring++) {
+    const baseR = (ring+1) * (Math.min(heroW,heroH) * 0.037);
+    const phase = ring * 0.4;
+    const segments = 120;
+    hCtx.beginPath();
+    for (let i=0; i<=segments; i++) {
+      const angle = (i/segments)*Math.PI*2;
+      const wobble = 1 + 0.04*Math.sin(angle*3 + t*2 + phase)
+                       + 0.025*Math.sin(angle*5 - t*1.5 + phase*2);
+      const r = baseR * wobble;
+      const tiltX = Math.cos(angle) * r;
+      const tiltY = Math.sin(angle) * r * 0.38; // perspective tilt
+      if (i===0) hCtx.moveTo(cx+tiltX, cy+tiltY);
+      else hCtx.lineTo(cx+tiltX, cy+tiltY);
+    }
+    hCtx.closePath();
+    const depth = ring/12;
+    const alpha = 0.06 + (1-depth)*0.12;
+    hCtx.strokeStyle = `rgba(${220+depth*35},${215+depth*40},${200+depth*55},${alpha})`;
+    hCtx.lineWidth = 0.7;
+    hCtx.stroke();
+  }
+
+  heroAnim = requestAnimationFrame(drawFluid);
+}
+
+function setStyle(style) {
+  cancelAnimationFrame(heroAnim);
+  currentStyle = style;
+  document.querySelectorAll('.dn-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-'+style).classList.add('active');
+  if (style === 'sphere') requestAnimationFrame(drawSphere);
+  else requestAnimationFrame(drawFluid);
+}
+
+requestAnimationFrame(drawSphere);
+
+// ─── FEATURES CANVAS: morphing wireframe ────────────────────
+const fCanvas = document.getElementById('feat-canvas');
+const fCtx = fCanvas.getContext('2d');
+
+function resizeFeat() {
+  const rect = fCanvas.parentElement.getBoundingClientRect();
+  fCanvas.width = rect.width;
+  fCanvas.height = rect.height;
+}
+resizeFeat();
+window.addEventListener('resize', resizeFeat);
+
+let ft = 0;
+const ico_v = [
+  [0,1,0],[0.894,0.447,0],[0.276,0.447,0.851],
+  [-0.724,0.447,0.526],[-0.724,0.447,-0.526],[0.276,0.447,-0.851],
+  [0.724,-0.447,0.526],[-0.276,-0.447,0.851],[-0.894,-0.447,0],
+  [-0.276,-0.447,-0.851],[0.724,-0.447,-0.526],[0,-1,0]
+];
+const ico_e = [
+  [0,1],[0,2],[0,3],[0,4],[0,5],[1,2],[2,3],[3,4],[4,5],[5,1],
+  [1,6],[2,7],[3,8],[4,9],[5,10],[6,7],[7,8],[8,9],[9,10],[10,6],
+  [6,11],[7,11],[8,11],[9,11],[10,11]
+];
+
+(function animFeat() {
+  const W = fCanvas.width, H = fCanvas.height;
+  fCtx.clearRect(0,0,W,H);
+  const cx=W/2, cy=H/2;
+  const scale = Math.min(W,H)*0.22;
+  const ry = ft*0.4, rx = 0.3+Math.sin(ft*0.2)*0.15;
+
+  function proj(v) {
+    let [x,y,z] = v;
+    const x2=x*Math.cos(ry)+z*Math.sin(ry), z1=-x*Math.sin(ry)+z*Math.cos(ry);
+    const y3=y*Math.cos(rx)-z1*Math.sin(rx), z3=y*Math.sin(rx)+z1*Math.cos(rx);
+    const fov=600, p=fov/(fov+z3*scale);
+    return {sx:cx+x2*scale*p, sy:cy+y3*scale*p, z:z3};
+  }
+
+  const pv = ico_v.map(proj);
+
+  // Draw edges
+  for (const [a,b] of ico_e) {
+    const pa=pv[a], pb=pv[b];
+    const depth = ((pa.z+pb.z)/2+1)/2;
+    fCtx.beginPath();
+    fCtx.moveTo(pa.sx, pa.sy);
+    fCtx.lineTo(pb.sx, pb.sy);
+    fCtx.strokeStyle = `rgba(255,255,255,${0.04+depth*0.18})`;
+    fCtx.lineWidth = 0.7;
+    fCtx.stroke();
+  }
+
+  // Draw verts
+  for (const p of pv) {
+    const d=(p.z+1)/2;
+    fCtx.beginPath();
+    fCtx.arc(p.sx, p.sy, 1.5, 0, Math.PI*2);
+    fCtx.fillStyle=`rgba(255,255,255,${0.15+d*0.55})`;
+    fCtx.fill();
+  }
+
+  ft += 0.01;
+  requestAnimationFrame(animFeat);
+})();
+</script>
+
+</body>
+</html>
