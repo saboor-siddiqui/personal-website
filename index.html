@@ -7,7 +7,8 @@
   <title>Saboor Siddiqui — Data Engineer & AI Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     /* ── Reset ─────────────────────────────────────── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,9 +16,1263 @@
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
     :root {
-      --bg:      #060608;
-      --bg2:     #0a0a0d;
-      --border:  rgba(255,255,255,0.06);
+      --bg:      #f8f9fc;
+      --bg2:     #ffffff;
+      --border:  rgba(0,0,0,0.08);
+      --text:    #1a1a2e;
+      --text2:   #4a4a68;
+      --accent:  #6366f1;
+      --accent2: #8b5cf6;
+      --accent3: #06b6d4;
+      --shadow:  0 10px 40px rgba(0,0,0,0.08);
+      --shadow-lg: 0 20px 60px rgba(99,102,241,0.15);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── Header ─────────────────────────────────────── */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(248,249,252,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .nav-links a {
+      font-weight: 500;
+      color: var(--text2);
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ── Hero Section ─────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding-top: 80px;
+      overflow: hidden;
+    }
+
+    #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 650px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1));
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 50px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.125rem;
+      color: var(--text2);
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 50px rgba(99,102,241,0.25);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--text);
+      border: 2px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    /* ── Stats Section ─────────────────────────────────────── */
+    .stats {
+      padding: 5rem 0;
+      background: var(--bg2);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 2rem;
+      background: var(--bg);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--text2);
+      font-weight: 500;
+    }
+
+    /* ── About Section ─────────────────────────────────────── */
+    .about {
+      padding: 6rem 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-tag {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1));
+      border-radius: 50px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 1rem;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-image {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .about-image::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 20px;
+      z-index: -1;
+      opacity: 0.2;
+    }
+
+    .about-text h3 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .about-text p {
+      color: var(--text2);
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .skill-tag {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text2);
+      transition: all 0.3s ease;
+    }
+
+    .skill-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* ── Projects Section ─────────────────────────────────────── */
+    .projects {
+      padding: 6rem 0;
+      background: var(--bg2);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: var(--bg);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.4s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .project-image {
+      height: 220px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+    }
+
+    .project-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 4rem;
+      opacity: 0.3;
+    }
+
+    .project-content {
+      padding: 2rem;
+    }
+
+    .project-tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .project-tag {
+      padding: 0.25rem 0.75rem;
+      background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1));
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .project-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .project-card p {
+      color: var(--text2);
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .project-link:hover {
+      gap: 0.75rem;
+    }
+
+    /* ── Services Section ─────────────────────────────────────── */
+    .services {
+      padding: 6rem 0;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .service-card {
+      background: var(--bg2);
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.1));
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .service-card p {
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    /* ── Contact Section ─────────────────────────────────────── */
+    .contact {
+      padding: 6rem 0;
+      background: var(--bg2);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .contact-info h3 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .contact-info p {
+      color: var(--text2);
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .contact-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .contact-form {
+      background: var(--bg);
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(99,102,241,0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* ── Footer ─────────────────────────────────────── */
+    footer {
+      background: var(--text);
+      color: white;
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand p {
+      color: rgba(255,255,255,0.7);
+      margin-top: 1rem;
+      line-height: 1.7;
+    }
+
+    .footer-title {
+      font-size: 1.125rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.7);
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: white;
+      padding-left: 5px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      background: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ── Animations ─────────────────────────────────────── */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ─────────────────────────────────────── */
+    @media (max-width: 968px) {
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .projects-grid,
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* ── Particle Effects ─────────────────────────────────────── */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      opacity: 0.1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <nav>
+        <a href="#" class="logo">Saboor.</a>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div id="canvas-container"></div>
+    <div class="container">
+      <div class="hero-content">
+        <span class="hero-badge">✨ Available for opportunities</span>
+        <h1>Data Engineer & <span>Cloud Architect</span> Building the Future</h1>
+        <p>I design and build scalable data systems and AI-powered solutions at American Express. Passionate about transforming complex data into actionable insights.</p>
+        <div class="hero-buttons">
+          <a href="#projects" class="btn btn-primary">
+            View My Work
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card animate-on-scroll">
+          <div class="stat-number">5+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div class="stat-card animate-on-scroll">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Projects Completed</div>
+        </div>
+        <div class="stat-card animate-on-scroll">
+          <div class="stat-number">10M+</div>
+          <div class="stat-label">Data Points Processed</div>
+        </div>
+        <div class="stat-card animate-on-scroll">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Client Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">About Me</span>
+        <h2 class="section-title">Turning Data Into Decisions</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-image animate-on-scroll">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=700&fit=crop" alt="Profile">
+        </div>
+        <div class="about-text animate-on-scroll">
+          <h3>Hello! I'm Saboor Siddiqui</h3>
+          <p>A Data Engineer and Cloud Solutions Architect at American Express, specializing in building robust data pipelines and AI-driven solutions that power business decisions at scale.</p>
+          <p>With expertise in cloud technologies and machine learning, I bridge the gap between raw data and meaningful insights, helping organizations make smarter, faster decisions.</p>
+          <div class="skills">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">AWS</span>
+            <span class="skill-tag">Azure</span>
+            <span class="skill-tag">Spark</span>
+            <span class="skill-tag">Kafka</span>
+            <span class="skill-tag">Machine Learning</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">Kubernetes</span>
+            <span class="skill-tag">TensorFlow</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section class="projects" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Portfolio</span>
+        <h2 class="section-title">Featured Projects</h2>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card animate-on-scroll">
+          <div class="project-image" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+            <div class="project-icon">🚀</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">Python</span>
+              <span class="project-tag">AWS</span>
+              <span class="project-tag">ML</span>
+            </div>
+            <h3>AI-Powered Analytics Platform</h3>
+            <p>Built a real-time analytics platform processing millions of transactions daily with predictive modeling capabilities.</p>
+            <a href="#" class="project-link">
+              View Project
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="project-card animate-on-scroll">
+          <div class="project-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+            <div class="project-icon">☁️</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">Azure</span>
+              <span class="project-tag">Spark</span>
+              <span class="project-tag">Kafka</span>
+            </div>
+            <h3>Cloud Data Pipeline</h3>
+            <p>Designed and implemented a scalable ETL pipeline handling 10TB+ of data daily with 99.9% uptime.</p>
+            <a href="#" class="project-link">
+              View Project
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="project-card animate-on-scroll">
+          <div class="project-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+            <div class="project-icon">🤖</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">TensorFlow</span>
+              <span class="project-tag">Python</span>
+              <span class="project-tag">Docker</span>
+            </div>
+            <h3>Fraud Detection System</h3>
+            <p>Developed ML models detecting fraudulent transactions with 95% accuracy, saving millions annually.</p>
+            <a href="#" class="project-link">
+              View Project
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="project-card animate-on-scroll">
+          <div class="project-image" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+            <div class="project-icon">📊</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">PowerBI</span>
+              <span class="project-tag">SQL</span>
+              <span class="project-tag">Azure</span>
+            </div>
+            <h3>Executive Dashboard</h3>
+            <p>Created interactive dashboards providing real-time business insights to C-level executives.</p>
+            <a href="#" class="project-link">
+              View Project
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="project-card animate-on-scroll">
+          <div class="project-image" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+            <div class="project-icon">⚡</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">Kubernetes</span>
+              <span class="project-tag">Python</span>
+              <span class="project-tag">Redis</span>
+            </div>
+            <h3>Real-time Processing Engine</h3>
+            <p>Built a high-throughput stream processing system handling 100K+ events per second.</p>
+            <a href="#" class="project-link">
+              View Project
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="project-card animate-on-scroll">
+          <div class="project-image" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">
+            <div class="project-icon">🔐</div>
+          </div>
+          <div class="project-content">
+            <div class="project-tags">
+              <span class="project-tag">AWS</span>
+              <span class="project-tag">Security</span>
+              <span class="project-tag">Encryption</span>
+            </div>
+            <h3>Data Security Framework</h3>
+            <p>Implemented enterprise-grade security protocols ensuring compliance with financial regulations.</p>
+            <a href="#" class="project-link">
+              View Project
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">What I Do</span>
+        <h2 class="section-title">Services & Expertise</h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card animate-on-scroll">
+          <div class="service-icon">🏗️</div>
+          <h3>Data Architecture</h3>
+          <p>Design scalable data architectures that support business growth and enable data-driven decision making.</p>
+        </div>
+        <div class="service-card animate-on-scroll">
+          <div class="service-icon">☁️</div>
+          <h3>Cloud Solutions</h3>
+          <p>Migrate and optimize workloads on AWS and Azure with focus on cost-efficiency and performance.</p>
+        </div>
+        <div class="service-card animate-on-scroll">
+          <div class="service-icon">🤖</div>
+          <h3>Machine Learning</h3>
+          <p>Build and deploy ML models that solve real business problems and create competitive advantages.</p>
+        </div>
+        <div class="service-card animate-on-scroll">
+          <div class="service-icon">📈</div>
+          <h3>Analytics Engineering</h3>
+          <p>Transform raw data into actionable insights through robust pipelines and visualization tools.</p>
+        </div>
+        <div class="service-card animate-on-scroll">
+          <div class="service-icon">⚡</div>
+          <h3>Stream Processing</h3>
+          <p>Implement real-time data processing systems for immediate insights and rapid response.</p>
+        </div>
+        <div class="service-card animate-on-scroll">
+          <div class="service-icon">🔒</div>
+          <h3>Data Governance</h3>
+          <p>Establish data quality, security, and compliance frameworks for enterprise environments.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info animate-on-scroll">
+          <h3>Let's Work Together</h3>
+          <p>Have a project in mind or want to discuss how I can help your organization? I'd love to hear from you.</p>
+          <div class="contact-details">
+            <div class="contact-item">
+              <div class="contact-icon">📧</div>
+              <div>
+                <strong>Email</strong>
+                <p>saboor.siddiqui@example.com</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">📍</div>
+              <div>
+                <strong>Location</strong>
+                <p>New York, NY (Remote Friendly)</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">💼</div>
+              <div>
+                <strong>LinkedIn</strong>
+                <p>linkedin.com/in/saboor</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form animate-on-scroll">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Tell me about your project..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            Send Message
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo" style="color: white;">Saboor.</a>
+          <p>Building the future of data engineering and AI solutions. Let's create something amazing together.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Services</h4>
+          <ul class="footer-links">
+            <li><a href="#">Data Architecture</a></li>
+            <li><a href="#">Cloud Solutions</a></li>
+            <li><a href="#">Machine Learning</a></li>
+            <li><a href="#">Consulting</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Connect</h4>
+          <div class="social-links">
+            <a href="#" class="social-link">in</a>
+            <a href="#" class="social-link">gh</a>
+            <a href="#" class="social-link">tw</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Saboor Siddiqui. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Three.js 3D Scene ───────────────────────────────────────
+    const initThreeJS = () => {
+      const container = document.getElementById('canvas-container');
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      // Create geometric shapes
+      const shapes = [];
+      const geometries = [
+        new THREE.IcosahedronGeometry(1, 0),
+        new THREE.OctahedronGeometry(1, 0),
+        new THREE.TetrahedronGeometry(1, 0)
+      ];
+
+      const material = new THREE.MeshBasicMaterial({ 
+        color: 0x6366f1, 
+        wireframe: true,
+        transparent: true,
+        opacity: 0.3
+      });
+
+      for (let i = 0; i < 15; i++) {
+        const geometry = geometries[Math.floor(Math.random() * geometries.length)];
+        const mesh = new THREE.Mesh(geometry, material);
+        
+        mesh.position.x = (Math.random() - 0.5) * 20;
+        mesh.position.y = (Math.random() - 0.5) * 20;
+        mesh.position.z = (Math.random() - 0.5) * 10 - 5;
+        
+        mesh.rotation.x = Math.random() * Math.PI;
+        mesh.rotation.y = Math.random() * Math.PI;
+        
+        const scale = Math.random() * 0.5 + 0.3;
+        mesh.scale.set(scale, scale, scale);
+        
+        mesh.userData = {
+          rotationSpeed: {
+            x: (Math.random() - 0.5) * 0.02,
+            y: (Math.random() - 0.5) * 0.02
+          },
+          floatSpeed: Math.random() * 0.5 + 0.5,
+          floatOffset: Math.random() * Math.PI * 2
+        };
+        
+        shapes.push(mesh);
+        scene.add(mesh);
+      }
+
+      // Add particles
+      const particlesGeometry = new THREE.BufferGeometry();
+      const particlesCount = 200;
+      const posArray = new Float32Array(particlesCount * 3);
+
+      for(let i = 0; i < particlesCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 30;
+      }
+
+      particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.05,
+        color: 0x8b5cf6,
+        transparent: true,
+        opacity: 0.6
+      });
+
+      const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+      scene.add(particlesMesh);
+
+      camera.position.z = 5;
+
+      // Mouse interaction
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetX = 0;
+      let targetY = 0;
+
+      const windowHalfX = window.innerWidth / 2;
+      const windowHalfY = window.innerHeight / 2;
+
+      document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - windowHalfX) * 0.001;
+        mouseY = (event.clientY - windowHalfY) * 0.001;
+      });
+
+      // Animation loop
+      const clock = new THREE.Clock();
+
+      const animate = () => {
+        requestAnimationFrame(animate);
+        
+        const elapsedTime = clock.getElapsedTime();
+
+        targetX += (mouseX - targetX) * 0.05;
+        targetY += (mouseY - targetY) * 0.05;
+
+        shapes.forEach((shape, index) => {
+          shape.rotation.x += shape.userData.rotationSpeed.x;
+          shape.rotation.y += shape.userData.rotationSpeed.y;
+          
+          shape.position.y += Math.sin(elapsedTime * shape.userData.floatSpeed + shape.userData.floatOffset) * 0.002;
+        });
+
+        particlesMesh.rotation.y = elapsedTime * 0.05;
+        particlesMesh.rotation.x = targetY * 0.5;
+        particlesMesh.rotation.y += targetX * 0.5;
+
+        renderer.render(scene, camera);
+      };
+
+      animate();
+
+      // Handle resize
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    };
+
+    // ── Scroll Animations ───────────────────────────────────────
+    const initScrollAnimations = () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+    };
+
+    // ── Initialize ───────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      initThreeJS();
+      initScrollAnimations();
+    });
+  </script>
+</body>
+</html>
       --border2: rgba(255,255,255,0.1);
       --white:   #ffffff;
       --dim1:    rgba(255,255,255,0.88);
