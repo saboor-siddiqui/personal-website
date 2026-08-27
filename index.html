@@ -603,6 +603,173 @@
     .core-caption-hint { color: #939db4; }
     .core-caption-hint::before { content: "·"; margin-right: 8px; color: var(--subtle); }
 
+    .loom-stage {
+      position: relative;
+      z-index: 3;
+      width: min(43vw, 580px);
+      min-width: 420px;
+      aspect-ratio: 1.08;
+      --loom-accent: #c4b5fd;
+      --loom-accent-rgb: 196, 181, 253;
+      --loom-secondary: #67e8f9;
+      --loom-secondary-rgb: 103, 232, 249;
+    }
+    .loom-stage[data-mode="1"] { --loom-accent: #5eead4; --loom-accent-rgb: 94, 234, 212; --loom-secondary: #67e8f9; --loom-secondary-rgb: 103, 232, 249; }
+    .loom-stage[data-mode="2"] { --loom-accent: #91a7ff; --loom-accent-rgb: 145, 167, 255; --loom-secondary: #fb7185; --loom-secondary-rgb: 251, 113, 133; }
+    .loom-viewport {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border: 1px solid rgba(205, 215, 245, .16);
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 52% 42%, rgba(var(--loom-accent-rgb), .11), transparent 38%),
+        radial-gradient(circle at 20% 90%, rgba(var(--loom-secondary-rgb), .055), transparent 40%),
+        linear-gradient(145deg, rgba(14,18,31,.91), rgba(5,7,13,.96));
+      box-shadow: 0 42px 100px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.055), inset 0 0 80px rgba(var(--loom-accent-rgb), .035);
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
+      cursor: grab;
+      isolation: isolate;
+      transition: border-color .45s, box-shadow .45s, background .55s;
+    }
+    .loom-viewport::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .52;
+      background-image: linear-gradient(rgba(var(--loom-accent-rgb), .045) 1px, transparent 1px), linear-gradient(90deg, rgba(var(--loom-secondary-rgb), .035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at 50% 44%, black, transparent 78%);
+    }
+    .loom-viewport::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: inherit;
+      background: linear-gradient(to bottom, rgba(4,6,11,.1), transparent 17% 71%, rgba(4,6,11,.82));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.018);
+    }
+    .loom-viewport:focus-visible { outline: 2px solid var(--loom-secondary); outline-offset: 5px; box-shadow: 0 0 0 8px rgba(var(--loom-secondary-rgb), .08), 0 42px 100px rgba(0,0,0,.45); }
+    .loom-viewport.is-dragging { cursor: grabbing; }
+    .loom-canvas { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; }
+    .loom-fallback {
+      position: absolute;
+      left: 50%;
+      top: 46%;
+      z-index: 1;
+      width: 54%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(var(--loom-accent-rgb), .23);
+      border-radius: 48% 52% 44% 56%;
+      background: radial-gradient(circle at 31% 28%, var(--loom-secondary) 0 2px, transparent 3px), radial-gradient(circle at 70% 37%, var(--loom-accent) 0 2px, transparent 3px), radial-gradient(circle at 45% 72%, white 0 2px, transparent 3px), radial-gradient(circle, rgba(var(--loom-accent-rgb), .14), transparent 65%);
+      box-shadow: 0 0 60px rgba(var(--loom-accent-rgb), .14), inset 0 0 45px rgba(var(--loom-secondary-rgb), .08);
+      transform: translate(-50%,-50%);
+      transition: opacity .35s;
+    }
+    .loom-ready .loom-fallback { opacity: 0; }
+    .loom-scan {
+      position: absolute;
+      inset: 8% 6% 16%;
+      z-index: 2;
+      pointer-events: none;
+      opacity: .3;
+      background: linear-gradient(90deg, transparent 0 48%, rgba(var(--loom-secondary-rgb), .16) 50%, transparent 52%);
+      background-size: 210% 100%;
+      animation: loomScan 7s ease-in-out infinite;
+      mask-image: linear-gradient(transparent, black 22% 75%, transparent);
+    }
+    @keyframes loomScan { 0%,100% { background-position: 100% 0; } 50% { background-position: -100% 0; } }
+    .loom-corner { position: absolute; z-index: 4; width: 22px; height: 22px; pointer-events: none; border-color: rgba(var(--loom-accent-rgb), .36); border-style: solid; transition: border-color .45s; }
+    .loom-corner.tl { left: 13px; top: 13px; border-width: 1px 0 0 1px; border-radius: 7px 0 0; }
+    .loom-corner.tr { right: 13px; top: 13px; border-width: 1px 1px 0 0; border-radius: 0 7px 0 0; }
+    .loom-corner.bl { left: 13px; bottom: 13px; border-width: 0 0 1px 1px; border-radius: 0 0 0 7px; }
+    .loom-corner.br { right: 13px; bottom: 13px; border-width: 0 1px 1px 0; border-radius: 0 0 7px; }
+    .loom-topbar {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      top: 20px;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      pointer-events: none;
+      color: var(--subtle);
+      font-size: .58rem;
+      font-weight: 800;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+    .loom-brand { color: #bac3d9; }
+    .loom-live { display: inline-flex; align-items: center; gap: 8px; color: var(--loom-secondary); }
+    .loom-live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 14px currentColor; }
+    .loom-readout {
+      position: absolute;
+      left: 24px;
+      bottom: 86px;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 11px;
+      min-width: 185px;
+      padding-left: 11px;
+      border-left: 2px solid var(--loom-accent);
+      pointer-events: none;
+    }
+    .loom-index { color: var(--loom-accent); font: 700 .68rem ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; }
+    .loom-readout strong { display: block; color: var(--text); font-size: .78rem; letter-spacing: .04em; }
+    .loom-readout small { display: block; margin-top: 4px; color: #919bb1; font-size: .59rem; font-weight: 600; letter-spacing: .035em; }
+    .loom-hint { position: absolute; right: 24px; bottom: 91px; z-index: 5; margin: 0; pointer-events: none; color: #858fa6; font-size: .55rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .loom-hint span { color: var(--loom-secondary); }
+    .loom-modes {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      z-index: 6;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid rgba(202, 210, 240, .13);
+      border-radius: 15px;
+      background: rgba(5, 8, 14, .83);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 16px 40px rgba(0,0,0,.2);
+      backdrop-filter: blur(14px);
+    }
+    .loom-mode {
+      position: relative;
+      min-width: 0;
+      min-height: 48px;
+      display: grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 7px 9px;
+      overflow: hidden;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      color: #929cb2;
+      background: transparent;
+      cursor: pointer;
+      transition: color .25s, border-color .25s, background .25s, transform .25s var(--ease);
+    }
+    .loom-mode::before { content: ""; position: absolute; left: 14px; right: 14px; top: 0; height: 2px; border-radius: 2px; background: var(--loom-accent); opacity: 0; transform: scaleX(.25); transition: opacity .25s, transform .35s var(--ease); }
+    .loom-mode:hover { color: var(--text); background: rgba(255,255,255,.035); }
+    .loom-mode[aria-pressed="true"] { color: var(--text); border-color: rgba(var(--loom-accent-rgb), .19); background: rgba(var(--loom-accent-rgb), .095); }
+    .loom-mode[aria-pressed="true"]::before { opacity: 1; transform: scaleX(1); }
+    .loom-mode span { color: var(--loom-accent); font: 700 .59rem ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; }
+    .loom-mode strong { font-size: .69rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+
     .hero-aside {
       position: relative;
       z-index: 4;
@@ -835,6 +1002,7 @@
       .hero-layout { grid-template-columns: minmax(330px,1fr) minmax(360px,.9fr); }
       .hero-aside { display: none; }
       .core-stage { justify-self: end; width: min(45vw, 500px); }
+      .loom-stage { justify-self: end; width: min(47vw, 540px); min-width: 380px; }
       .project-card { grid-column: span 6; }
       .project-card:last-child { grid-column: 4 / span 6; }
       .process-grid { grid-template-columns: repeat(2,1fr); }
@@ -875,7 +1043,8 @@
       .hero-copy { display: flex; flex-direction: column; align-items: center; }
       .hero-deck { max-width: 590px; }
       .core-stage { grid-row: 1; justify-self: center; width: min(85vw, 470px); min-width: 0; }
-      .hero-copy { grid-row: 2; }
+      .hero-copy { grid-row: 1; }
+      .loom-stage { grid-row: 2; justify-self: center; width: min(100%, 560px); min-width: 0; margin-top: 4px; }
       .scroll-cue { display: none; }
       .signal-rail { grid-template-columns: 1fr; }
       .signal { border-right: 0; border-bottom: 1px solid var(--line); }
@@ -909,6 +1078,17 @@
       .core-mode strong { font-size: .61rem; }
       .core-caption { bottom: 58px; gap: 6px; font-size: .54rem; letter-spacing: .085em; }
       .core-caption-hint::before { margin-right: 6px; }
+      .loom-stage { width: 100%; aspect-ratio: .95; }
+      .loom-topbar { left: 15px; right: 15px; top: 15px; font-size: .5rem; letter-spacing: .12em; }
+      .loom-readout { left: 15px; bottom: 72px; min-width: 0; gap: 8px; padding-left: 8px; }
+      .loom-index { font-size: .59rem; }
+      .loom-readout strong { font-size: .68rem; }
+      .loom-readout small { font-size: .52rem; }
+      .loom-hint { right: 15px; bottom: 74px; max-width: 84px; font-size: .48rem; line-height: 1.5; text-align: right; }
+      .loom-modes { left: 8px; right: 8px; bottom: 8px; }
+      .loom-mode { min-height: 44px; gap: 6px; padding-inline: 6px; }
+      .loom-mode span { font-size: .52rem; }
+      .loom-mode strong { font-size: .62rem; }
       .section-title { font-size: clamp(2.55rem, 13vw, 4rem); }
       .about-grid, .project-grid { margin-top: 45px; }
       .about-story { min-height: 470px; padding: 28px; }
@@ -973,31 +1153,22 @@
           </div>
         </div>
 
-        <div class="core-stage" id="core-stage" data-mode="0" role="group" aria-label="Interactive data core">
-          <div class="core-orb" id="core-orb" role="button" tabindex="0" aria-label="Pulse and rotate the data core" aria-describedby="core-help">
-            <div class="core-scene" aria-hidden="true">
-              <div class="core-depth-plane"></div>
-              <div class="core-shadow"></div>
-              <div class="core-object" id="core-object">
-                <div class="core-halo"></div>
-                <div class="core-axis"></div>
-                <div class="core-fallback"></div>
-                <canvas class="core-canvas" id="core-canvas"></canvas>
-                <div class="orbit orbit-one"></div>
-                <div class="orbit orbit-two"></div>
-                <div class="orbit orbit-three"></div>
-                <div class="core-nodes"><i class="core-node"></i><i class="core-node"></i><i class="core-node"></i></div>
-                <div class="energy-ripple"></div>
-              </div>
-            </div>
+        <div class="loom-stage" id="loom-stage" data-mode="0" role="group" aria-label="Interactive systems observatory">
+          <div class="loom-viewport" id="loom-viewport" role="button" tabindex="0" aria-label="Explore the Agentic AI neural mesh and send a signal" aria-describedby="loom-help loom-instruction">
+            <canvas class="loom-canvas" id="loom-canvas" aria-hidden="true"></canvas>
+            <div class="loom-fallback" aria-hidden="true"></div>
+            <div class="loom-scan" aria-hidden="true"></div>
+            <i class="loom-corner tl" aria-hidden="true"></i><i class="loom-corner tr" aria-hidden="true"></i><i class="loom-corner bl" aria-hidden="true"></i><i class="loom-corner br" aria-hidden="true"></i>
           </div>
-          <div class="core-caption" id="core-help"><span class="core-caption-state" id="core-caption-state">Agentic AI online</span><span class="core-caption-hint">Drag or swipe · tap to pulse</span></div>
-          <div class="core-modes" role="group" aria-label="Choose data core mode">
-            <button class="core-mode" type="button" data-core-mode="0" aria-pressed="true" aria-label="Select Agentic AI mode"><span>Mode 01</span><strong>Agentic AI</strong></button>
-            <button class="core-mode" type="button" data-core-mode="1" aria-pressed="false" aria-label="Select Big Data mode"><span>Mode 02</span><strong>Big Data</strong></button>
-            <button class="core-mode" type="button" data-core-mode="2" aria-pressed="false" aria-label="Select Cloud Scale mode"><span>Mode 03</span><strong>Cloud Scale</strong></button>
+          <div class="loom-topbar" aria-hidden="true"><span class="loom-brand">Saboor / Systems Lab</span><span class="loom-live">Live field</span></div>
+          <div class="loom-readout" id="loom-help"><span class="loom-index" id="loom-index">01</span><span><strong id="loom-label">Neural mesh</strong><small id="loom-detail">Reason · review · act</small></span></div>
+          <p class="loom-hint" id="loom-instruction">Drag to orbit <span>·</span> tap to transmit</p>
+          <div class="loom-modes" role="group" aria-label="Choose systems view">
+            <button class="loom-mode" type="button" data-loom-mode="0" aria-pressed="true" aria-label="Show Agentic AI neural mesh"><span>01</span><strong>AI</strong></button>
+            <button class="loom-mode" type="button" data-loom-mode="1" aria-pressed="false" aria-label="Show Big Data streaming field"><span>02</span><strong>Data</strong></button>
+            <button class="loom-mode" type="button" data-loom-mode="2" aria-pressed="false" aria-label="Show Cloud Scale infrastructure matrix"><span>03</span><strong>Cloud</strong></button>
           </div>
-          <span class="sr-only" id="core-live" aria-live="polite"></span>
+          <span class="sr-only" id="loom-live" aria-live="polite"></span>
         </div>
 
         <aside class="hero-aside" aria-label="Professional focus">
@@ -1273,6 +1444,7 @@
 
       }
 
+      if (false) {
       const coreStage=document.getElementById('core-stage');
       const coreOrb=document.getElementById('core-orb');
       const coreObject=document.getElementById('core-object');
@@ -1405,10 +1577,173 @@
       });
       coreModeButtons.forEach(button=>button.addEventListener('click',()=>setCoreMode(button.dataset.coreMode)));
       applyCoreRotation();
+      }
 
       const hero=document.getElementById('hero');
       let heroVisible=true;
-      if ('IntersectionObserver' in window) new IntersectionObserver(([entry]) => { heroVisible=entry.isIntersecting; }, {rootMargin:'120px'}).observe(hero);
+      let wakeLoom=()=>{};
+      if ('IntersectionObserver' in window) new IntersectionObserver(([entry]) => { heroVisible=entry.isIntersecting; if(heroVisible)wakeLoom(); }, {rootMargin:'120px'}).observe(hero);
+
+      const loomStage=document.getElementById('loom-stage');
+      const loomViewport=document.getElementById('loom-viewport');
+      const loomCanvas=document.getElementById('loom-canvas');
+      const loomCtx=loomCanvas?.getContext('2d',{alpha:true});
+      const loomButtons=[...document.querySelectorAll('[data-loom-mode]')];
+      const loomIndex=document.getElementById('loom-index');
+      const loomLabel=document.getElementById('loom-label');
+      const loomDetail=document.getElementById('loom-detail');
+      const loomLive=document.getElementById('loom-live');
+      const loomModes=[
+        {name:'Agentic AI',label:'Neural mesh',detail:'Reason · review · act',tags:['PLAN','REVIEW','ACT']},
+        {name:'Big Data',label:'Streaming field',detail:'25–30 TB moving daily',tags:['INGEST','TRANSFORM','SERVE']},
+        {name:'Cloud Scale',label:'Cloud matrix',detail:'AWS + GCP · resilient scale',tags:['REGION A','CONTROL','OBSERVE']}
+      ];
+      const updateLoomMeta=(index,announce=true)=>{
+        const next=Math.min(2,Math.max(0,Number(index)||0)),meta=loomModes[next];
+        loomStage.dataset.mode=String(next);
+        loomIndex.textContent='0'+(next+1);
+        loomLabel.textContent=meta.label;
+        loomDetail.textContent=meta.detail;
+        loomButtons.forEach((button,i)=>button.setAttribute('aria-pressed',String(i===next)));
+        loomViewport.setAttribute('aria-label','Explore the '+meta.name+' '+meta.label+' and send a signal');
+        if(announce)loomLive.textContent=meta.name+' view selected: '+meta.detail+'.';
+        return next;
+      };
+
+      if(loomStage&&loomViewport&&loomCanvas&&loomCtx){
+        document.documentElement.classList.add('loom-ready');
+        const TAU=Math.PI*2,loomClamp=(value,min,max)=>Math.min(max,Math.max(min,value));
+        const coarsePointer=matchMedia('(pointer: coarse)').matches;
+        const strandCount=coarsePointer?9:12,samplesPerStrand=coarsePointer?34:44,nodeCount=strandCount*samplesPerStrand;
+        const loomHash=value=>{const n=Math.sin(value*127.1+311.7)*43758.5453;return n-Math.floor(n);};
+        const shapes=[new Array(nodeCount),new Array(nodeCount),new Array(nodeCount)];
+        const palettes=[[[196,181,253],[103,232,249]],[[94,234,212],[103,232,249]],[[145,167,255],[251,113,133]]];
+
+        for(let strand=0;strand<strandCount;strand++){
+          const phase=TAU*(strand+.5)/strandCount,seed=loomHash(strand+1);
+          for(let sample=0;sample<samplesPerStrand;sample++){
+            const t=sample/(samplesPerStrand-1),a=TAU*t,index=strand*samplesPerStrand+sample;
+            const knotRadius=.66+.21*Math.cos(3*a),tube=.035+seed*.026;
+            shapes[0][index]=[
+              knotRadius*Math.cos(2*a)+Math.cos(phase+a)*tube,
+              .52*Math.sin(3*a)+Math.sin(phase)*tube,
+              knotRadius*Math.sin(2*a)+Math.sin(phase+a)*tube
+            ];
+
+            const streamY=(t-.5)*1.72,streamR=.2+.61*Math.pow(Math.abs(streamY)/.86,.7),streamA=a*2.8+phase;
+            shapes[1][index]=[
+              streamR*Math.cos(streamA),
+              streamY+.028*Math.sin(phase+streamA*2),
+              streamR*Math.sin(streamA)
+            ];
+
+            const corner=strand%4,xCorner=corner%2 ? .72 : -.72,yCorner=corner>1 ? .58 : -.58,zCorner=(corner===1||corner===2) ? .56 : -.56,breath=.015*Math.sin(a*2+phase);
+            if(strand<4)shapes[2][index]=[xCorner+breath,(t-.5)*1.48,zCorner-breath];
+            else if(strand<8)shapes[2][index]=[(t-.5)*1.72,yCorner+breath,zCorner];
+            else shapes[2][index]=[xCorner,yCorner-breath,(t-.5)*1.38];
+          }
+        }
+
+        const nodes=shapes[0].map((position,index)=>({p:[...position],seed:loomHash(index+19),index}));
+        const loomState={
+          mode:0,yaw:.3,pitch:-.14,velocityYaw:0,velocityPitch:0,dragging:false,pointerId:null,moved:false,startX:0,startY:0,lastX:0,lastY:0,lastTime:0,
+          pointerX:0,pointerY:0,targetPointerX:0,targetPointerY:0,pointerInside:false,pulse:null,width:1,height:1,dpr:1,lastFrame:performance.now(),frame:0,
+          colorA:[...palettes[0][0]],colorB:[...palettes[0][1]]
+        };
+        const rgba=(color,alpha)=>`rgba(${color[0].toFixed(0)},${color[1].toFixed(0)},${color[2].toFixed(0)},${alpha})`;
+
+        const resizeLoom=()=>{
+          const rect=loomCanvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,coarsePointer?1.2:1.5);
+          loomState.width=Math.max(1,rect.width);loomState.height=Math.max(1,rect.height);loomState.dpr=dpr;
+          const width=Math.max(1,Math.round(rect.width*dpr)),height=Math.max(1,Math.round(rect.height*dpr));
+          if(loomCanvas.width!==width||loomCanvas.height!==height){loomCanvas.width=width;loomCanvas.height=height;loomCtx.setTransform(dpr,0,0,dpr,0,0);}
+          wakeLoom();
+        };
+        new ResizeObserver(resizeLoom).observe(loomCanvas);
+
+        const pulseLoom=(x=loomState.width*.5,y=loomState.height*.44,announce=true)=>{
+          loomState.pulse={x,y,start:performance.now()};
+          if(announce)loomLive.textContent=loomModes[loomState.mode].name+' signal transmitted.';
+          wakeLoom();
+        };
+        const setLoomMode=(index,announce=true)=>{
+          loomState.mode=updateLoomMeta(index,announce);
+          if(reduceMotion)nodes.forEach((node,i)=>{node.p=[...shapes[loomState.mode][i]];});
+          pulseLoom(loomState.width*.5,loomState.height*.43,false);
+          wakeLoom();
+        };
+
+        const projectNode=(node,time,pulseProgress)=>{
+          let x=node.p[0],y=node.p[1],z=node.p[2];
+          if(!reduceMotion){const drift=time*.00055+node.seed*TAU*3;x+=Math.sin(drift)*.009;y+=Math.cos(drift*.83)*.008;z+=Math.sin(drift*.67)*.009;}
+          const yaw=loomState.yaw+loomState.pointerX*.13,pitch=loomState.pitch-loomState.pointerY*.075,cy=Math.cos(yaw),sy=Math.sin(yaw),cx=Math.cos(pitch),sx=Math.sin(pitch);
+          const rx=x*cy-z*sy,rz=x*sy+z*cy,ry=y*cx-rz*sx,depthZ=y*sx+rz*cx;
+          const perspective=3.35/(3.65-depthZ),base=Math.min(loomState.width,loomState.height)*.29;
+          let px=loomState.width*.5+rx*base*perspective,py=loomState.height*.43-ry*base*perspective;
+          if(loomState.pointerInside){const pointerPx=loomState.width*(.5+loomState.pointerX*.5),pointerPy=loomState.height*(.5+loomState.pointerY*.5),dx=px-pointerPx,dy=py-pointerPy,distance=Math.hypot(dx,dy)||1;
+            if(distance<105){const force=Math.pow(1-distance/105,2)*15;px+=dx/distance*force;py+=dy/distance*force;}
+          }
+          if(loomState.pulse&&pulseProgress<1){const dx=px-loomState.pulse.x,dy=py-loomState.pulse.y,distance=Math.hypot(dx,dy)||1,radius=pulseProgress*Math.max(loomState.width,loomState.height)*.64,band=Math.exp(-Math.pow((distance-radius)/18,2))*(1-pulseProgress);
+            px+=dx/distance*band*24;py+=dy/distance*band*24;
+          }
+          return {x:px,y:py,z:depthZ,perspective,depth:loomClamp((depthZ+1.35)/2.7,0,1),node};
+        };
+
+        const drawLoom=now=>{
+          loomState.frame=0;
+          if(!heroVisible||document.hidden)return;
+          if(!reduceMotion&&now-loomState.lastFrame<22){loomState.frame=requestAnimationFrame(drawLoom);return;}
+          const dt=Math.min(.033,Math.max(.001,(now-loomState.lastFrame)/1000));loomState.lastFrame=now;
+          const ease=reduceMotion?1:1-Math.exp(-5.4*dt),targetPalette=palettes[loomState.mode];
+          for(let c=0;c<3;c++){loomState.colorA[c]+=(targetPalette[0][c]-loomState.colorA[c])*ease;loomState.colorB[c]+=(targetPalette[1][c]-loomState.colorB[c])*ease;}
+          nodes.forEach((node,index)=>{const target=shapes[loomState.mode][index];node.p[0]+=(target[0]-node.p[0])*ease;node.p[1]+=(target[1]-node.p[1])*ease;node.p[2]+=(target[2]-node.p[2])*ease;});
+          loomState.pointerX+=(loomState.targetPointerX-loomState.pointerX)*(reduceMotion?1:.085);loomState.pointerY+=(loomState.targetPointerY-loomState.pointerY)*(reduceMotion?1:.085);
+          if(!loomState.dragging&&!reduceMotion){loomState.yaw+=loomState.velocityYaw*dt+.032*dt;loomState.pitch=loomClamp(loomState.pitch+loomState.velocityPitch*dt,-.82,.82);const friction=Math.exp(-4.8*dt);loomState.velocityYaw*=friction;loomState.velocityPitch*=friction;}
+
+          const width=loomState.width,height=loomState.height,pulseProgress=loomState.pulse?loomClamp((now-loomState.pulse.start)/920,0,1):1;
+          if(loomState.pulse&&pulseProgress>=1)loomState.pulse=null;
+          loomCtx.clearRect(0,0,width,height);
+
+          const field=loomCtx.createRadialGradient(width*.5,height*.43,0,width*.5,height*.43,Math.min(width,height)*.45);
+          field.addColorStop(0,rgba(loomState.colorA,.085));field.addColorStop(.5,rgba(loomState.colorB,.025));field.addColorStop(1,'rgba(0,0,0,0)');loomCtx.fillStyle=field;loomCtx.fillRect(0,0,width,height);
+          loomCtx.save();loomCtx.globalCompositeOperation='lighter';
+          for(let ring=0;ring<4;ring++){loomCtx.beginPath();loomCtx.ellipse(width*.5,height*.69,width*(.18+ring*.055),height*(.022+ring*.009),0,0,TAU);loomCtx.strokeStyle=rgba(ring%2?loomState.colorB:loomState.colorA,.075-ring*.009);loomCtx.lineWidth=1;loomCtx.stroke();}
+          if(loomState.pulse&&pulseProgress<1){loomCtx.beginPath();loomCtx.arc(loomState.pulse.x,loomState.pulse.y,pulseProgress*Math.max(width,height)*.64,0,TAU);loomCtx.strokeStyle=rgba(loomState.colorB,(1-pulseProgress)*.65);loomCtx.lineWidth=1.4;loomCtx.stroke();}
+
+          const projected=nodes.map(node=>projectNode(node,now,pulseProgress));
+          const ribbonGradient=loomCtx.createLinearGradient(width*.18,height*.18,width*.82,height*.72);ribbonGradient.addColorStop(0,rgba(loomState.colorA,.85));ribbonGradient.addColorStop(.52,rgba(loomState.colorB,.8));ribbonGradient.addColorStop(1,rgba(loomState.colorA,.66));
+          for(const pass of [{width:8,alpha:.055},{width:1.15,alpha:.42}]){
+            loomCtx.globalAlpha=pass.alpha;loomCtx.lineWidth=pass.width;loomCtx.lineCap='round';loomCtx.lineJoin='round';loomCtx.strokeStyle=ribbonGradient;
+            for(let strand=0;strand<strandCount;strand++){const base=strand*samplesPerStrand;loomCtx.beginPath();loomCtx.moveTo(projected[base].x,projected[base].y);for(let sample=1;sample<samplesPerStrand;sample++)loomCtx.lineTo(projected[base+sample].x,projected[base+sample].y);loomCtx.stroke();}
+          }
+          if(loomState.mode===0){loomCtx.globalAlpha=.13;loomCtx.lineWidth=.65;loomCtx.strokeStyle=rgba(loomState.colorA,.9);for(let sample=5;sample<samplesPerStrand;sample+=8){for(let strand=0;strand<strandCount;strand+=2){const a=projected[strand*samplesPerStrand+sample],b=projected[((strand+1)%strandCount)*samplesPerStrand+sample];loomCtx.beginPath();loomCtx.moveTo(a.x,a.y);loomCtx.lineTo(b.x,b.y);loomCtx.stroke();}}}
+          else if(loomState.mode===2){loomCtx.globalAlpha=.18;loomCtx.lineWidth=.7;loomCtx.strokeStyle=rgba(loomState.colorB,.82);const order=[0,2,1,3,0],levels=[Math.floor(samplesPerStrand*.24),Math.floor(samplesPerStrand*.5),Math.floor(samplesPerStrand*.76)];for(const sample of levels){loomCtx.beginPath();order.forEach((strand,i)=>{const point=projected[strand*samplesPerStrand+sample];if(i===0)loomCtx.moveTo(point.x,point.y);else loomCtx.lineTo(point.x,point.y);});loomCtx.stroke();}}
+
+          projected.sort((a,b)=>a.z-b.z);
+          for(const point of projected){const anchor=point.node.index%samplesPerStrand===0||point.node.index%67===0,radius=(.55+point.perspective*.8)*(anchor?2.05:1),alpha=.18+point.depth*.62;
+            loomCtx.beginPath();loomCtx.arc(point.x,point.y,radius,0,TAU);loomCtx.fillStyle=rgba(point.node.seed>.52?loomState.colorB:loomState.colorA,alpha);if(anchor){loomCtx.shadowBlur=14;loomCtx.shadowColor=rgba(loomState.colorB,.8);}loomCtx.fill();loomCtx.shadowBlur=0;
+          }
+          if(!reduceMotion){for(let signal=0;signal<7;signal++){const strand=(signal*5)%strandCount,travel=((now*.000065+signal*.137)%1)*(samplesPerStrand-1),lo=Math.floor(travel),mix=travel-lo,a=projected.find(p=>p.node.index===strand*samplesPerStrand+lo),b=projected.find(p=>p.node.index===strand*samplesPerStrand+Math.min(samplesPerStrand-1,lo+1));if(!a||!b)continue;const x=a.x+(b.x-a.x)*mix,y=a.y+(b.y-a.y)*mix;loomCtx.beginPath();loomCtx.arc(x,y,2.3,0,TAU);loomCtx.shadowBlur=18;loomCtx.shadowColor=rgba(loomState.colorB,1);loomCtx.fillStyle='rgba(255,255,255,.92)';loomCtx.fill();loomCtx.shadowBlur=0;}}
+
+          const anchors=[Math.floor(nodeCount*.18),Math.floor(nodeCount*.52),Math.floor(nodeCount*.83)],tags=loomModes[loomState.mode].tags;
+          loomCtx.globalAlpha=.78;loomCtx.font='700 8px Manrope, sans-serif';loomCtx.textBaseline='middle';
+          anchors.forEach((id,index)=>{const point=projected.find(item=>item.node.index===id);if(!point||point.y<55||point.y>height-100)return;const direction=index%2? -1:1,endX=point.x+direction*18,textX=endX+direction*5;loomCtx.beginPath();loomCtx.moveTo(point.x,point.y);loomCtx.lineTo(endX,point.y);loomCtx.strokeStyle=rgba(loomState.colorB,.48);loomCtx.lineWidth=.7;loomCtx.stroke();loomCtx.textAlign=direction>0?'left':'right';loomCtx.fillStyle=rgba(loomState.colorB,.78);loomCtx.fillText(tags[index],textX,point.y);});
+          loomCtx.restore();
+          if(!reduceMotion)loomState.frame=requestAnimationFrame(drawLoom);
+        };
+
+        wakeLoom=()=>{if(heroVisible&&!document.hidden&&!loomState.frame)loomState.frame=requestAnimationFrame(drawLoom);};
+        const updatePointer=event=>{const rect=loomViewport.getBoundingClientRect();loomState.targetPointerX=loomClamp((event.clientX-rect.left)/rect.width*2-1,-1,1);loomState.targetPointerY=loomClamp((event.clientY-rect.top)/rect.height*2-1,-1,1);loomState.pointerInside=true;};
+        loomViewport.addEventListener('pointerdown',event=>{if(event.button!==undefined&&event.button!==0)return;updatePointer(event);loomState.dragging=true;loomState.pointerId=event.pointerId;loomState.moved=false;loomState.startX=loomState.lastX=event.clientX;loomState.startY=loomState.lastY=event.clientY;loomState.lastTime=performance.now();loomState.velocityYaw=loomState.velocityPitch=0;loomViewport.classList.add('is-dragging');try{loomViewport.setPointerCapture(event.pointerId);}catch(error){};wakeLoom();});
+        loomViewport.addEventListener('pointermove',event=>{updatePointer(event);if(!loomState.dragging||event.pointerId!==loomState.pointerId)return;const now=performance.now(),dx=event.clientX-loomState.lastX,dy=event.clientY-loomState.lastY,dt=Math.max(.008,(now-loomState.lastTime)/1000),totalX=event.clientX-loomState.startX,totalY=event.clientY-loomState.startY;if(Math.hypot(totalX,totalY)>7)loomState.moved=true;loomState.yaw+=dx*.006;loomState.pitch=loomClamp(loomState.pitch+dy*.004,-.82,.82);loomState.velocityYaw=loomState.velocityYaw*.55+(dx*.006/dt)*.45;loomState.velocityPitch=loomState.velocityPitch*.55+(dy*.004/dt)*.45;loomState.lastX=event.clientX;loomState.lastY=event.clientY;loomState.lastTime=now;if(event.pointerType==='mouse'||Math.abs(totalX)>Math.abs(totalY)+5){if(event.cancelable)event.preventDefault();}wakeLoom();});
+        const endLoomDrag=(event,cancelled=false)=>{if(!loomState.dragging||(event.pointerId!==undefined&&event.pointerId!==loomState.pointerId))return;const moved=loomState.moved;loomState.dragging=false;loomViewport.classList.remove('is-dragging');if(loomViewport.hasPointerCapture?.(loomState.pointerId))loomViewport.releasePointerCapture(loomState.pointerId);loomState.pointerId=null;if(cancelled||reduceMotion)loomState.velocityYaw=loomState.velocityPitch=0;if(!cancelled&&!moved){const rect=loomViewport.getBoundingClientRect();pulseLoom(event.clientX-rect.left,event.clientY-rect.top);}wakeLoom();};
+        loomViewport.addEventListener('pointerup',event=>endLoomDrag(event));loomViewport.addEventListener('pointercancel',event=>endLoomDrag(event,true));loomViewport.addEventListener('lostpointercapture',event=>{if(loomState.dragging)endLoomDrag(event,true);});loomViewport.addEventListener('pointerenter',updatePointer);loomViewport.addEventListener('pointerleave',()=>{if(!loomState.dragging){loomState.pointerInside=false;loomState.targetPointerX=loomState.targetPointerY=0;}});
+        loomViewport.addEventListener('keydown',event=>{const step=event.shiftKey ? .22 : .11;if(event.key==='ArrowLeft')loomState.yaw-=step;else if(event.key==='ArrowRight')loomState.yaw+=step;else if(event.key==='ArrowUp')loomState.pitch=loomClamp(loomState.pitch-.09,-.82,.82);else if(event.key==='ArrowDown')loomState.pitch=loomClamp(loomState.pitch+.09,-.82,.82);else if(event.key==='Enter'||event.key===' '){event.preventDefault();pulseLoom();return;}else if(event.key>='1'&&event.key<='3'){event.preventDefault();setLoomMode(Number(event.key)-1);return;}else if(event.key==='Home'){loomState.yaw=.3;loomState.pitch=-.14;}else return;event.preventDefault();wakeLoom();});
+        loomButtons.forEach(button=>button.addEventListener('click',()=>setLoomMode(button.dataset.loomMode)));
+        document.addEventListener('visibilitychange',wakeLoom);addEventListener('scroll',wakeLoom,{passive:true});resizeLoom();updateLoomMeta(0,false);wakeLoom();
+      }else if(loomStage){
+        loomButtons.forEach(button=>button.addEventListener('click',()=>updateLoomMeta(button.dataset.loomMode)));
+      }
 
       const ambient=document.getElementById('ambient-canvas');
       const actx=ambient.getContext('2d');
@@ -1431,6 +1766,7 @@
         document.addEventListener('visibilitychange',wakeAmbient);addEventListener('scroll',wakeAmbient,{passive:true});wakeAmbient();
       }
 
+      if (false) {
       const canvas=document.getElementById('core-canvas');
       const gl=canvas.getContext('webgl2',{alpha:true,antialias:false,premultipliedAlpha:false,powerPreference:'high-performance'});
       if (gl) {
@@ -1456,6 +1792,7 @@
             document.addEventListener('visibilitychange',requestCoreRender);addEventListener('scroll',requestCoreRender,{passive:true});requestCoreRender();
           }
         }
+      }
       }
     })();
   </script>
