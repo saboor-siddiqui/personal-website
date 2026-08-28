@@ -1,0 +1,165 @@
+@keyframes livePulse {
+  0%, 100% { opacity: 0.55; transform: scale(0.82); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+@keyframes cueScan {
+  0%, 100% { transform: scaleX(1); opacity: 1; }
+  50% { transform: scaleX(0.34); opacity: 0.42; }
+}
+
+@keyframes fallbackDrift {
+  0%, 100% { transform: translate(-50%, -50%) rotate(-8deg) scale(0.98); }
+  50% { transform: translate(-50%, -53%) rotate(5deg) scale(1.02); }
+}
+
+@keyframes radarScan {
+  0%, 100% { top: 23%; opacity: 0.9; }
+  50% { top: 78%; opacity: 0.4; }
+}
+
+@keyframes failPulse {
+  0%, 100% { box-shadow: 0 0 0 6px rgba(251, 113, 133, 0.05), 0 0 30px rgba(251, 113, 133, 0.18); }
+  50% { box-shadow: 0 0 0 11px rgba(251, 113, 133, 0.03), 0 0 38px rgba(251, 113, 133, 0.28); }
+}
+
+@keyframes spinClockwise {
+  to { rotate: 360deg; }
+}
+
+@keyframes spinCounter {
+  to { rotate: -360deg; }
+}
+
+.availability-dot,
+.loom-live::before {
+  animation: livePulse 2.2s ease-in-out infinite;
+}
+
+.scroll-cue span {
+  animation: cueScan 2.4s ease-in-out infinite;
+  transform-origin: right;
+}
+
+.loom-fallback {
+  animation: fallbackDrift 8s ease-in-out infinite;
+}
+
+.radar-scan {
+  animation: radarScan 3.2s ease-in-out infinite;
+}
+
+.dag-node.fail {
+  animation: failPulse 2s ease-in-out infinite;
+}
+
+.optimizer-rings::before {
+  animation: spinClockwise 7s linear infinite;
+}
+
+.optimizer-rings::after {
+  animation: spinCounter 4s linear infinite;
+}
+
+.loom-viewport:hover {
+  border-color: rgba(var(--loom-accent-rgb), 0.3);
+  box-shadow: 0 46px 108px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.07), inset 0 0 95px rgba(var(--loom-accent-rgb), 0.045);
+}
+
+.glass-card,
+.process-card,
+.project-card {
+  backface-visibility: hidden;
+}
+
+.glass-card::before,
+.process-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(118deg, transparent 22%, rgba(255, 255, 255, 0.055), transparent 48%);
+  opacity: 0;
+  transform: translateX(-45%);
+  transition: opacity 0.3s, transform 0.75s var(--ease);
+}
+
+.glass-card:hover::before,
+.process-card:hover::after {
+  opacity: 1;
+  transform: translateX(45%);
+}
+
+.project-visual,
+.about-story,
+.expertise-card,
+.micro-card,
+.process-card,
+.timeline-item,
+.education-note {
+  will-change: auto;
+}
+
+.is-animating {
+  will-change: transform, opacity;
+}
+
+.project-card.is-interacting {
+  transition: border-color 0.35s, box-shadow 0.35s;
+  will-change: transform;
+}
+
+.button.is-magnetic {
+  transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, transform 0.12s ease-out;
+  will-change: transform;
+}
+
+.nav-link:active,
+.loom-mode:active {
+  transform: scale(0.97);
+}
+
+.loom-mode:hover span {
+  text-shadow: 0 0 14px currentColor;
+}
+
+.project-card:hover .project-visual {
+  --project-scale: 1.014;
+}
+
+.project-card:hover .project-no,
+.project-card:focus-visible .project-no {
+  color: var(--cyan);
+}
+
+.contact-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s var(--ease);
+}
+
+.contact-links a:hover::after {
+  transform: scaleX(1);
+}
+
+@supports (animation-timeline: view()) {
+  .section-kicker::before {
+    animation: nativeLineReveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 55%;
+  }
+}
+
+@keyframes nativeLineReveal {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
